@@ -3,10 +3,14 @@ from util import (killall, kill_whitespace_in, kill_classes,
                   is_string, is_spacing_p, is_under)
 import match
 import build
+from os.path import join
 
+
+site_path = "site"
+materials_path = "src/materials"
 
 # Read HTML file
-with open("index.html") as f:
+with open(join(site_path, "65c816/index.html")) as f:
     html = BeautifulSoup(f, 'html.parser')
 
 
@@ -32,7 +36,9 @@ def make_header():
 # Add things to <head> (css, js)
 def process_head():
     head = html.head
-    to_prepend = [html.new_tag('base', href="/src/65c816/")]
+    to_prepend = [
+      # html.new_tag('base', href="/src/65c816/")
+    ]
     to_append = [
         html.new_tag('meta', attrs={
             'name': 'viewport',
@@ -187,5 +193,5 @@ wrap_patterns(
 )
 
 # Write HTML
-with open("index.html", 'w') as f:
+with open(join(site_path, "65c816/index.html"), 'w') as f:
     f.write(str(html))

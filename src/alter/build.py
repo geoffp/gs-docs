@@ -2,9 +2,11 @@ from copy import copy
 from bs4 import BeautifulSoup
 import parse
 from util import make_new
+from os.path import join, dirname
+
 
 # Read templates HTML file
-with open("alter/templates.html") as file:
+with open(join(dirname(__file__), "templates.html")) as file:
     templates = BeautifulSoup(file, 'html.parser')
 
 

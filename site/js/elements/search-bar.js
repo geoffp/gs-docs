@@ -1,4 +1,4 @@
-import { setup } from '../../nanoce/index.js';
+import { setup } from '/js/nanoce.js';
 
 function textNodesUnder(el) {
   let n = null;

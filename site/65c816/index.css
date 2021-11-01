@@ -1,41 +1,41 @@
 @font-face {
   font-family: "Apple Garamond";
-  src: url("font/AppleGaramond.ttf") format("truetype");
+  src: url("/font/AppleGaramond.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Apple Garamond";
   font-style: italic;
-  src: url("font/AppleGaramond-Italic.ttf") format("truetype");
+  src: url("/font/AppleGaramond-Italic.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Apple Garamond";
   font-weight: bold;
-  src: url("font/AppleGaramond-Bold.ttf") format("truetype");
+  src: url("/font/AppleGaramond-Bold.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Apple Garamond";
   font-weight: 200;
-  src: url("font/AppleGaramond-Light.ttf") format("truetype");
+  src: url("/font/AppleGaramond-Light.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "Apple Garamond";
   font-weight: bold;
   font-style: italic;
-  src: url("font/AppleGaramond-BoldItalic.ttf") format("truetype");
+  src: url("/font/AppleGaramond-BoldItalic.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "PR Number 3";
-  src: url("font/PRNumber3.ttf") format("truetype");
+  src: url("/font/PRNumber3.ttf") format("truetype");
 }
 
 @font-face {
   font-family: "PrintChar 21";
-  src: url("font/PrintChar21.ttf") format("truetype");
+  src: url("/font/PrintChar21.ttf") format("truetype");
 }
 
 /*

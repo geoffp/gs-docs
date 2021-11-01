@@ -1,1 +1,1 @@
-import './ces/search-bar.js';
+import '/js/elements/search-bar.js';

@@ -4,7 +4,7 @@
   "description": "Modern Documentation for Apple IIGS development",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "wds --open site/"
+    "start": "wds --open"
   },
   "author": "Geoff Pursell",
   "license": "ISC",
