@@ -1,0 +1,14 @@
+{
+  "name": "GS-docs",
+  "version": "1.0.0",
+  "description": "Modern Documentation for Apple IIGS development",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "wds --open site/"
+  },
+  "author": "Geoff Pursell",
+  "license": "ISC",
+  "devDependencies": {
+    "@web/dev-server": "^0.1.25"
+  }
+}

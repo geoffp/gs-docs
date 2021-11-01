@@ -1,0 +1,335 @@
+@font-face {
+  font-family: "Apple Garamond";
+  src: url("font/AppleGaramond.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Apple Garamond";
+  font-style: italic;
+  src: url("font/AppleGaramond-Italic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Apple Garamond";
+  font-weight: bold;
+  src: url("font/AppleGaramond-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Apple Garamond";
+  font-weight: 200;
+  src: url("font/AppleGaramond-Light.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Apple Garamond";
+  font-weight: bold;
+  font-style: italic;
+  src: url("font/AppleGaramond-BoldItalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "PR Number 3";
+  src: url("font/PRNumber3.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "PrintChar 21";
+  src: url("font/PrintChar21.ttf") format("truetype");
+}
+
+/*
+AppleGaramond-Bold.ttf
+AppleGaramond-BoldItalic.ttf
+AppleGaramond-Italic.ttf
+AppleGaramond-Light.ttf
+AppleGaramond-LightItalic.ttf
+AppleGaramond.ttf
+*/
+
+:root {
+  --spacing-1: 1.3rem;
+  --spacing-2: calc(2.0 * var(--spacing-1));
+  --neg-spacing-1: calc(0rem - var(--spacing-1));
+  --flush: var(--neg-spacing-1) var(--neg-spacing-1) var(--spacing-1);
+  --shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  --narrow-mono-font: normal 0.75em "PR Number 3", "Monaco", mono;
+  --mono-font: normal 0.75em "PrintChar 21", "Monaco", mono;
+  --sticky-bar-height: 3rem;
+  --sticky-nav-width: 10rem;
+  --color-link: #555;
+  --color-link-hover: blue;
+}
+
+@media screen and (max-width:500px) {
+  :root {
+    --mono-font: var(--narrow-mono-font)
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  color: #333;
+  font-size: 1.3rem;
+  font-family: "Apple Garamond", serif;
+  margin: var(--spacing-1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+header {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  background: #eee;
+  margin: var(--flush);
+  padding: 1rem;
+}
+
+header h1 {
+  flex: 1 0 auto;
+  margin: 0;
+}
+
+header address {
+  display: block;
+  font: inherit;
+  font-style: italic;
+}
+
+
+section {
+  margin-bottom: var(--spacing-2);
+}
+
+search-bar, h3 {
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0px;
+
+  font-size: 1.6rem;
+  height: var(--sticky-bar-height);
+  z-index: 10;
+}
+
+search-bar {
+  background: #eeeeee;
+  margin: var(--flush);
+  margin-bottom: 0;
+  box-shadow: var(--shadow);
+}
+
+h3 {
+  margin: var(--spacing-1) 0;
+  margin-right: calc(var(--spacing-1) + var(--sticky-nav-width)) !important;
+}
+
+h3:first-child {
+  margin: var(--spacing-1) 0;
+}
+
+
+nav {
+  --indent: 0rem;
+}
+
+nav li {
+  display: block;
+  margin-left: var(--indent);
+}
+
+nav li.lvl-1 {
+  --indent: 1em;
+}
+nav li.lvl-2 {
+  --indent: 2em;
+}
+nav li.lvl-3 {
+  --indent: 3em;
+}
+nav li.lvl-4 {
+  --indent: 4em;
+}
+
+nav .section-number {
+  font-weight: lighter;
+  margin-right: 0.4em;
+}
+
+nav a {
+  display: inline-block;
+  color: var(--color-link);
+  text-decoration: none;
+  padding: 0.2em 0.4em;
+}
+
+nav a:hover,
+nav a:active {
+  color: var(--color-link-hover);
+  text-decoration: none;
+}
+
+nav a:hover .section-name,
+nav a:active .section-name {
+  text-decoration: underline;
+}
+
+pre {
+  color: #eee;
+  background: #333;
+  font: var(--mono-font);
+  padding: var(--spacing-1);
+  max-width: 100%;
+  overflow: auto;
+}
+
+code {
+  font: var(--mono-font);
+}
+
+aside.right {
+  float: right;
+  max-width: 14rem;
+  padding: var(--spacing-1);
+  margin: var(--spacing-1);
+  margin-right: 0;
+  background: #f2f2cc;
+  border: solid 1px #e2e2bb;
+}
+
+@media screen and (max-width: 500px) {
+  aside.right {
+    float: none;
+    max-width: 100%;
+    margin: var(--spacing-1);
+  }
+}
+
+/* <address> depicts a 24-bit address diagram */
+address {
+  --byte-width: 33.3%;
+  --byte-border: 2px;
+  display: flex;
+  align-items: center;
+  width: 40em;
+  max-width: 100%;
+  margin: var(--spacing-1) 0;
+  font: var(--mono-font);
+  font-style: normal;
+}
+
+/* Consecutive addresses */
+address + address {
+  margin-top: calc(0px - var(--spacing-1) + var(--byte-border));
+}
+
+/* The three-byte "boxes" */
+address-bytes {
+  --border-color: #f3f3f3;
+  display: flex;
+  align-items: center;
+  width: 75%;
+  border: var(--byte-border) solid #bbb;
+  border-radius: 4px;
+  background: #f7f7f7;
+}
+
+/* each byte */
+address-byte {
+  position: relative;
+  width: var(--byte-width);
+  text-align: center;
+  padding: 0.4rem;
+  box-shadow: inset 0.2rem 0.2rem 1rem rgba(0, 0, 0, 0.1);
+}
+
+address-byte + address-byte {
+  border-left: solid 1px rgba(0, 0, 0, 0.2);
+}
+
+address-byte[length="2"] {
+  --byte-width: 66.66%;
+}
+
+address-byte[length="3"] {
+  --byte-width: 100%;
+}
+
+address-byte[length="2"]::after,
+address-byte[length="3"]::after {
+  --size: 50%;
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--size);
+  left: var(--size);
+  z-index: -1;
+}
+
+address-byte[length="2"]::after {
+  border-left: 1px dashed #aaa;
+}
+
+address-byte[length="3"]::after {
+  --size: 33.3%;
+  border: 1px dashed #aaa;
+  border-top: none;
+  border-bottom: none;
+}
+
+address-description {
+  width: var(--byte-width);
+  margin: 0 var(--spacing-1);
+}
+
+
+/* Opcode tables */
+
+table-scroller {
+  display: block;
+  max-width: 100%;
+  overflow: auto;
+}
+
+table.opcode {
+  --fade: 0.8rem;
+  font: var(--mono-font);
+  border-spacing: 1rem;
+}
+
+@media screen and (max-width:500px) {
+  table.opcode {
+    border-spacing: 0.25rem;
+    --fade: 0.25rem;
+  }
+}
+
+table.opcode thead {
+  position: sticky;
+  top: var(--sticky-bar-height);
+  background: white;
+  box-shadow: 0 0 var(--fade) var(--fade) white;
+}
+
+table.opcode th,
+table.opcode td {
+  white-space: nowrap;
+}
+
+table.opcode th {
+  padding-top: var(--spacing-1);
+}
+
+table.opcode tr {
+  text-align: left;
+}
