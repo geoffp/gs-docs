@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup, NavigableString
-from util import (killall, kill_whitespace_in, kill_classes,
-                  is_string, is_spacing_p, is_under)
+from util import (killall, kill_whitespace_in, kill_classes, listify,
+                  is_spacing_p, is_under,
+                  wrap_with_tag, string_children_of,
+                  indent_nav_item, wrap_section_number, move_section_name_into_a)
 import match
 import build
 from os.path import join
@@ -73,39 +75,74 @@ def wrap_sections():
 
 
 def wrap_bare_text_in_sections():
-    for section in html.body.find_all('section'):
-        for child in section.children:
-            if type(child) is NavigableString and child.strip() != '':
-                p = html.new_tag('p', attrs={'class': 'added'})
-                child.wrap(p)
+    [wrap_with_tag(textNode, 'p', 'added')
+     for section
+     in html.body.find_all('section')
+     for textNode
+     in string_children_of(section)
+     if textNode.strip() != '']
 
 
 def process_nav():
+    """
+    Indent the nav (mildly)
+    Wrap section numbers and titles in their own spans for styling
+    Make the <a> surround the whole thing
+    """
+    transforms = [
+        indent_nav_item,
+        wrap_section_number,
+        move_section_name_into_a
+    ]
+
     nav = html.body.section
     nav.name = 'nav'
 
-    for li in nav.select('ul > li'):
-        dots = min(li.a.string.count('.'), 1)
-        li['class'] = 'lvl-%d' % dots
-        num_span = html.new_tag('span', attrs={'class': 'section-number'})
-        li.a.string.wrap(num_span)
-        for s in li.children:
-            if type(s) is NavigableString:
-                title_span = html.new_tag('span', attrs={'class': 'section-name'})
-                li.a.append(s)
-                s.wrap(title_span)
+    for li in nav.select('li'):
+        [t(li) for t in transforms]
+
+
+def prettify_heading(textNode):
+    replacements = [
+        ('And', 'and'),
+        ('The', 'the'),
+        ('Of', 'of')
+    ]
+
+    # Title-case
+    pretty = textNode.title()
+
+    # Decapitalize some little words tho
+    for x, y in replacements:
+        pretty = pretty.replace(x, y)
+
+    textNode.replace_with(pretty)
 
 
 # Recapitalize nav and section headings
 def process_headings():
-    lis = html.select("ul > li, h3 > a")
-    for li in lis:
-        for c in li.children:
-            if is_string(c) and not match.is_opcode_heading(c):
-                c.replace_with(c.title().replace('And', 'and'))
+    """
+    Make heading titles pretty.
+    Note: selectors assume that process_nav() has already been run.
+    """
+    headings = html.select("nav .section-name") + html.select("h3 > a")
+    # selectors = ["nav .section-name", "h3 > a"]
+    # headings = [html.select(s) for s in selectors]
+    print(headings)
+
+    for heading in headings:
+        [prettify_heading(text)
+         for text in string_children_of(heading)
+         if not match.is_opcode_heading(text)]
 
 
 def process_preformatteds():
+    """
+    Parse out data from <pre> sections and arrange it in a more structured way.
+    This so far includes:
+    - opcode tables
+    - address diagrams
+    """
     pres = html.findAll('pre')
 
     for pre in pres:
@@ -113,7 +150,6 @@ def process_preformatteds():
 
         if match.is_address(pre_text):
             pre.replace_with(build.address(pre_text))
-
         elif match.is_op_table(pre_text):
             pre.replace_with(build.op_table(pre_text))
 
@@ -159,15 +195,15 @@ def match_in_string_node(haystack, needle):
     return [haystack]
 
 
-def wrap_patterns(matcher, filter_func=lambda _: True):
-    # ps = html.find_all(lambda e: True, string=match.hex_string)
-    ps = html.find_all(string=matcher)
-    for string_node in filter(filter_func, ps):
-        new_nodes = process_matches_in_string_node(
-            string_node, matcher
-        )
-        string_node.insert_after(*new_nodes)
-        string_node.replace_with('')
+def wrap_patterns(matchers, filter_func=lambda _: True):
+    for matcher in listify(matchers):
+        matches = filter(filter_func, html.find_all(string=matcher))
+        for string_node in matches:
+            new_nodes = process_matches_in_string_node(
+                string_node, matcher
+            )
+            string_node.insert_after(*new_nodes)
+            string_node.replace_with('')
 
 
 # Do the things!
@@ -176,9 +212,9 @@ make_header()
 make_search()
 wrap_sections()
 wrap_bare_text_in_sections()
-process_headings()
 process_preformatteds()
 process_nav()
+process_headings()
 wrap_patterns(
     match.call_expression,
     lambda s: is_under(['p', 'li'], s) and not is_under('code', s)

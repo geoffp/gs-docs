@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "checkJs": true
+    "moduleResolution": "none",
+    "noImplicitAny": false,
+    "baseUrl": "."
+  },
+  "include": ["**/*.js", "**/*.d.ts"]
+}

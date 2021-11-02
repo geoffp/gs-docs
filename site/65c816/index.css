@@ -137,6 +137,8 @@ h3:first-child {
 }
 
 
+/* Navigation */
+
 nav {
   --indent: 0rem;
 }
@@ -181,6 +183,9 @@ nav a:hover .section-name,
 nav a:active .section-name {
   text-decoration: underline;
 }
+
+
+/* Preformatted blocks: code, tables */
 
 pre {
   color: #eee;
@@ -332,4 +337,18 @@ table.opcode th {
 
 table.opcode tr {
   text-align: left;
+}
+
+
+/* Paragraphs and general content */
+p {
+  margin-top: 0;
+}
+@media screen and (min-width: 800px) {
+  /* section { */
+  /*   columns: 2; */
+  /* } */
+  /* section > *:not(p) { */
+  /*   column-span: all; */
+  /* } */
 }

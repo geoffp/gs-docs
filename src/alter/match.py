@@ -1,6 +1,6 @@
 import re
 
-call_expression = re.compile(r'\b[A-Z]{3}\s*[([]? *#?\$[0-9A-Fa-f]+( *, *[SsXYxy])? *[)\]]\s*( *, *[XYxy])?')
+call_expression = re.compile(r'\b[A-Z]{3}\s*[([]?\s*#?\$[0-9A-Fa-f]+(\s*,\s*[SsXYxy])?\s*[)\]]?\s*(\s*,\s*[XYxy])?', re.MULTILINE)
 hex_number = re.compile(r'#?\$[0-9A-Fa-f]+')
 opcode = re.compile(r'\b[A-Z]{3}\b')
 

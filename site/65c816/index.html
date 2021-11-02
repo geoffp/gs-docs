@@ -161,7 +161,7 @@
       <li class="lvl-1">
         <a href="#5.22"><span class="section-number">5.22</span>
         <span class="section-name">Page and Bank Boundary Wrapping
-        Of The Stack</span></a>
+        of the Stack</span></a>
       </li>
       <li class="lvl-1">
         <a href="#5.23"><span class="section-number">5.23</span>
@@ -355,24 +355,24 @@
     Y index registers (likewise, 8 or 16 bits), and native or
     emulation mode. The 10 combinations are:</p>
     <ul>
-      <li>Binary Mode, Emulation Mode</li>
-      <li>Binary Mode, Native Mode, 8-Bit Accumulator Mode, 8-Bit
-      Index Register Mode</li>
-      <li>Binary Mode, Native Mode, 8-Bit Accumulator Mode, 16-Bit
-      Index Register Mode</li>
-      <li>Binary Mode, Native Mode, 16-Bit Accumulator Mode, 8-Bit
-      Index Register Mode</li>
-      <li>Binary Mode, Native Mode, 16-Bit Accumulator Mode, 16-Bit
-      Index Register Mode</li>
-      <li>Decimal Mode, Emulation Mode</li>
-      <li>Decimal Mode, Native Mode, 8-Bit Accumulator Mode, 8-Bit
-      Index Register Mode</li>
-      <li>Decimal Mode, Native Mode, 8-Bit Accumulator Mode, 16-Bit
-      Index Register Mode</li>
-      <li>Decimal Mode, Native Mode, 16-Bit Accumulator Mode, 8-Bit
-      Index Register Mode</li>
-      <li>Decimal Mode, Native Mode, 16-Bit Accumulator Mode,
-      16-Bit Index Register Mode</li>
+      <li>binary mode, emulation mode</li>
+      <li>binary mode, native mode, 8-bit accumulator mode, 8-bit
+      index register mode</li>
+      <li>binary mode, native mode, 8-bit accumulator mode, 16-bit
+      index register mode</li>
+      <li>binary mode, native mode, 16-bit accumulator mode, 8-bit
+      index register mode</li>
+      <li>binary mode, native mode, 16-bit accumulator mode, 16-bit
+      index register mode</li>
+      <li>decimal mode, emulation mode</li>
+      <li>decimal mode, native mode, 8-bit accumulator mode, 8-bit
+      index register mode</li>
+      <li>decimal mode, native mode, 8-bit accumulator mode, 16-bit
+      index register mode</li>
+      <li>decimal mode, native mode, 16-bit accumulator mode, 8-bit
+      index register mode</li>
+      <li>decimal mode, native mode, 16-bit accumulator mode,
+      16-bit index register mode</li>
     </ul>
     <p>In emulation mode, both the accumulator (and memory) width
     and the index register width are always 8 bits, which is why
@@ -393,13 +393,13 @@
     lower address and the high(er) byte is the next address. For
     example, if:</p>
     <ul>
-      <li><code>$123456</code> Contains <code>$Ab</code></li>
-      <li><code>$123457</code> Contains <code>$Cd</code></li>
+      <li><code>$123456</code> contains <code>$AB</code></li>
+      <li><code>$123457</code> contains <code>$CD</code></li>
     </ul>
-    <p class="added">then a <code>LDA</code> <code>$123456</code>
-    (when in 16-bit accumulator mode) puts <code>$CDAB</code> into
-    the accumulator. This byte order applies everywhere, e.g. a
-    <code>LDA</code> <code>$123456</code> instruction assembles as
+    <p class="added">then a <code>LDA $123456</code> (when in
+    16-bit accumulator mode) puts <code>$CDAB</code> into the
+    accumulator. This byte order applies everywhere, e.g. a
+    <code>LDA $123456</code> instruction assembles as
     <code>$AF</code> <code>$56</code> <code>$34</code>
     <code>$12</code>, <code>JSR</code> pushes the return address
     onto the stack in such a way that the lower 8 bits will be at
@@ -408,12 +408,11 @@
     <p>The 65C02 and NMOS 6502 have a 64k address space, which is
     subdivided into 256 pages; each page, therefore is 256 bytes.
     In general, cycle counts are affected when a page boundary is
-    crossed (e.g. <code>LDA</code> <code>$1234</code>,X takes 4
-    cycles when X is 0, but takes 5 cycles when X is
-    <code>$FF</code>). Also, the zero page and the stack wrap at
-    page boundaries (e.g. when X is 1, <code>LDA</code>
-    <code>$FF</code>,X is equivalent to <code>LDA</code>
-    <code>$0000</code> rather than <code>LDA $0100)</code>.</p>
+    crossed (e.g. <code>LDA $1234,X</code> takes 4 cycles when X is
+    0, but takes 5 cycles when X is <code>$FF</code>). Also, the
+    zero page and the stack wrap at page boundaries (e.g. when X is
+    1, <code>LDA $FF,X</code> is equivalent to <code>LDA
+    $0000</code> rather than <code>LDA $0100)</code>.</p>
     <p>On the 65C816, a page is still defined as 256 bytes, and a
     bank is defined as 64k bytes. In emulation mode, the behavior
     of the 65C02 and NMOS 6502 is (generally) preserved, but in
@@ -434,20 +433,18 @@
     operation, such as addition). By contrast, on the 65C816, the
     same opcode is used for both 8-bit and 16-bit data, and the
     data width is determined by a processor mode, rather than the
-    opcode. For example, the instruction <code>XOR</code>
-    <code>$123456</code> (which assembles to the bytes
-    <code>$4F</code> <code>$56</code> <code>$34</code>
-    <code>$12</code>) is an 8-bit exclusive-or operation in 8-bit
-    accumulator mode, and a 16-bit exclusive-or operation in 16-bit
-    accumulator mode.</p>
+    opcode. For example, the instruction <code>XOR $123456</code>
+    (which assembles to the bytes <code>$4F</code> <code>$56</code>
+    <code>$34</code> <code>$12</code>) is an 8-bit exclusive-or
+    operation in 8-bit accumulator mode, and a 16-bit exclusive-or
+    operation in 16-bit accumulator mode.</p>
     <p>One ramification is that 8-bit immediate data and 16-bit
     immediate data also use the same opcode. For example, the
     opcode A9 is <code>LDA</code> immediate and the next one or two
     bytes will be the immediate data depending on the accumulator
     mode. So, in 16-bit accumulator mode, A9 01 0A is the 16-bit
-    instruction <code>LDA</code> <code>#$0A01</code>, and in 8-bit
-    accumulator mode A9 01 0A is a pair of 8-bit instructions,
-    namely:</p>
+    instruction <code>LDA #$0A01</code>, and in 8-bit accumulator
+    mode A9 01 0A is a pair of 8-bit instructions, namely:</p>
     <pre>
 LDA #$01
 ASL
@@ -475,17 +472,17 @@ SUBROUTINE LDY #0         ; this needs to be assembled as three bytes
     <p>One of the most common approaches is to have one or more
     assembler directives for specifying the width. For example:</p>
     <ul>
-      <li>.M8 ; 8-Bit Accumulator Immediate Data</li>
-      <li>.M16 ; 16-Bit Accumulator Immediate Data</li>
-      <li>.X8 ; 8-Bit Index Register Immediate Data</li>
-      <li>.X16 ; 16-Bit Index Register Immediate Data</li>
+      <li>.m8 ; 8-bit accumulator immediate data</li>
+      <li>.m16 ; 16-bit accumulator immediate data</li>
+      <li>.x8 ; 8-bit index register immediate data</li>
+      <li>.x16 ; 16-bit index register immediate data</li>
     </ul>
     <p class="added">or:</p>
     <ul>
-      <li>.Mx 16 ; 16-Bit Accumulator Immediate Data</li>
-      <li>.Mx ,8 ; 8-Bit Index Register Immediate Data</li>
-      <li>.Mx 8,16 ; 8-Bit Accumulator, 16-Bit Index Register
-      Immediate Data</li>
+      <li>.mx 16 ; 16-bit accumulator immediate data</li>
+      <li>.mx ,8 ; 8-bit index register immediate data</li>
+      <li>.mx 8,16 ; 8-bit accumulator, 16-bit index register
+      immediate data</li>
     </ul>
     <p>It is important to remember that these directives do not
     actually generate any code that will change the data width.
@@ -572,72 +569,72 @@ SUBROUTINE LDY #0         ; this needs to be assembled as three bytes
     16-bit register, so terms will be defined for this purpose.</p>
     <p>There are 9 registers. They are:</p>
     <ul>
-      <li>The Accumulator (16 Bits Wide)</li>
-      <li>The Data Bank Register (8 Bits Wide)</li>
-      <li>The Direct Register (16 Bits Wide)</li>
-      <li>The Program Bank Register (8 Bits Wide)</li>
-      <li>The Program Counter (16 Bits Wide)</li>
-      <li>The Processor Status Register (8 Bits Wide)</li>
-      <li>The Stack Pointer (16 Bits Wide)</li>
-      <li>The X Index Register (16 Bits Wide)</li>
-      <li>The Y Index Register (16 Bits Wide)</li>
+      <li>The Accumulator (16 bits wide)</li>
+      <li>The Data Bank Register (8 bits wide)</li>
+      <li>The Direct register (16 bits wide)</li>
+      <li>The program banK register (8 bits wide)</li>
+      <li>The Program Counter (16 bits wide)</li>
+      <li>The Processor status register (8 bits wide)</li>
+      <li>The Stack pointer (16 bits wide)</li>
+      <li>The X index register (16 bits wide)</li>
+      <li>The Y index register (16 bits wide)</li>
     </ul>
     <p class="added">There are 10 flags. Each is one bit wide. They
     are:</p>
     <ul>
-      <li>The Break Flag</li>
-      <li>The Carry Flag</li>
-      <li>The Decimal Mode Flag</li>
-      <li>The Emulation Mode Flag</li>
-      <li>The Interrupt Disable Flag</li>
-      <li>The Accumulator and Memory Width Flag</li>
-      <li>The Negative Flag</li>
-      <li>The Overflow Flag</li>
-      <li>The Index Register Width Flag</li>
-      <li>The Zero Flag</li>
+      <li>The Break flag</li>
+      <li>The Carry flag</li>
+      <li>The Decimal mode flag</li>
+      <li>The Emulation mode flag</li>
+      <li>The Interrupt disable flag</li>
+      <li>The accumulator and Memory width flag</li>
+      <li>The Negative flag</li>
+      <li>The oVerflow flag</li>
+      <li>The indeX register width flag</li>
+      <li>The Zero flag</li>
     </ul>
     <p class="added">The terms used for these registers and flags
     will be:</p>
     <ul>
-      <li>A Accumulator: The Lower 8 Bits Of The Accumulator</li>
-      <li>B Accumulator: The Upper 8 Bits Of The Accumulator</li>
-      <li>C Accumulator: The 16-Bit Accumulator</li>
+      <li>A accumulator: the lower 8 bits of the accumulator</li>
+      <li>B accumulator: the upper 8 bits of the accumulator</li>
+      <li>C accumulator: the 16-bit accumulator</li>
       <li><code>DBR</code>: the data bank register</li>
-      <li>D Register: The 16-Bit Direct Register</li>
-      <li>Dl Register: The Lower 8 Bits Of The Direct Register</li>
-      <li>Dh Register: The Upper 8 Bits Of The Direct Register</li>
-      <li>K Register: The Program Bank Register</li>
-      <li>Pc: The 16-Bit Program Counter</li>
+      <li>D register: the 16-bit direct register</li>
+      <li>DL register: the lower 8 bits of the direct register</li>
+      <li>DH register: the upper 8 bits of the direct register</li>
+      <li>K register: the program bank register</li>
+      <li>PC: the 16-bit program counter</li>
       <li><code>PCL</code>: the lower 8 bits of the program
       counter</li>
       <li><code>PCH</code>: the upper 8 bits of the program
       counter</li>
-      <li>P Register: The Processor Status Register</li>
-      <li>S Register: The 16-Bit Stack Pointer</li>
-      <li>Sl Register: The Lower 8 Bits Of The Stack Pointer</li>
-      <li>Sh Register: The Upper 8 Bits Of The Stack Pointer</li>
-      <li>X Register: The 16-Bit X Index Register</li>
-      <li>Xl Register: The Lower 8 Bits Of The X Index
-      Register</li>
-      <li>Xh Register: The Upper 8 Bits Of The X Index
-      Register</li>
-      <li>Y Register: The 16-Bit Y Index Register</li>
-      <li>Yl Register: The Lower 8 Bits Of The Y Index
-      Register</li>
-      <li>Yh Register: The Upper 8 Bits Of The Y Index
-      Register</li>
+      <li>P register: the processor status register</li>
+      <li>S register: the 16-bit stack pointer</li>
+      <li>SL register: the lower 8 bits of the stack pointer</li>
+      <li>SH register: the upper 8 bits of the stack pointer</li>
+      <li>X register: the 16-bit X index register</li>
+      <li>XL register: the lower 8 bits of the X index
+      register</li>
+      <li>XH register: the upper 8 bits of the X index
+      register</li>
+      <li>Y register: the 16-bit Y index register</li>
+      <li>YL register: the lower 8 bits of the Y index
+      register</li>
+      <li>YH register: The upper 8 bits of the Y index
+      register</li>
     </ul>
     <ul>
-      <li>B Flag: The Break Flag</li>
-      <li>C Flag: The Carry Flag</li>
-      <li>D Flag: The Decimal Mode Flag</li>
-      <li>E Flag: The Emulation Mode Flag</li>
-      <li>I Flag: The Interrupt Disable Flag</li>
-      <li>M Flag: The Accumulator and Memory Width Flag</li>
-      <li>N Flag: The Negative Flag</li>
-      <li>V Flag: The Overflow Flag</li>
-      <li>X Flag: The Index Register Width Flag</li>
-      <li>Z Flag: The Zero Flag</li>
+      <li>b flag: the break flag</li>
+      <li>c flag: the carry flag</li>
+      <li>d flag: the decimal mode flag</li>
+      <li>e flag: the emulation mode flag</li>
+      <li>i flag: the interrupt disable flag</li>
+      <li>m flag: the accumulator and memory width flag</li>
+      <li>n flag: the negative flag</li>
+      <li>v flag: the overflow flag</li>
+      <li>x flag: the index register width flag</li>
+      <li>z flag: the zero flag</li>
     </ul>
     <p>The term "accumulator" without any additional qualifiers
     means the 16-bit accumulator (i.e. the C accumulator) when the
@@ -652,15 +649,15 @@ SUBROUTINE LDY #0         ; this needs to be assembled as three bytes
     register".</p>
     <p>The P register contains 9 (yes, 9) of the flags.</p>
     <ul>
-      <li>P Register Bit 7: N Flag</li>
-      <li>P Register Bit 6: V Flag</li>
-      <li>P Register Bit 5: M Flag (Native Mode)</li>
-      <li>P Register Bit 4: X Flag (Native Mode), B Flag (Emulation
-      Mode)</li>
-      <li>P Register Bit 3: D Flag</li>
-      <li>P Register Bit 2: I Flag</li>
-      <li>P Register Bit 1: Z Flag</li>
-      <li>P Register Bit 0: C Flag</li>
+      <li>P register bit 7: n flag</li>
+      <li>P register bit 6: v flag</li>
+      <li>P register bit 5: m flag (native mode)</li>
+      <li>P register bit 4: x flag (native mode), b flag (emulation
+      mode)</li>
+      <li>P register bit 3: d flag</li>
+      <li>P register bit 2: i flag</li>
+      <li>P register bit 1: z flag</li>
+      <li>P register bit 0: c flag</li>
     </ul>
     <p>The e flag is separate from the P register but is accessed
     via the c flag using the <code>XCE</code> instruction (details
@@ -723,14 +720,14 @@ REP #$10   ; 16-bit index registers
     are disabled. Note that <code>IRQ</code> is in fact the only
     interrupt that can be disabled by the i flag.</p>
     <ul>
-      <li>The Z Flag Is 1 When The Result Is Zero. The Z Flag Is 0
-      When The Result Is Non-Zero.</li>
+      <li>The z flag is 1 when the result is zero. The z flag is 0
+      when the result is non-zero.</li>
     </ul>
     <ul>
-      <li>The C Flag Is 1 When There Is An Arithmetic Carry (Carry
-      Has The Same Meaning That "Carrying The One" Meant When You
-      Learned Addition In School). The C Flag Is 0 When Where Was
-      Not An Arithmetic Carry.</li>
+      <li>The c flag is 1 when there is an arithmetic carry (carry
+      has the same meaning that "carrying the one" meant when you
+      learned addition in school). The c flag is 0 when where was
+      not an arithmetic carry.</li>
     </ul>
     <p>When the e flag is 0, the 65C816 is in native mode. When the
     e flag is 1, the 65C816 is in emulation mode. When the e flag
@@ -775,10 +772,10 @@ XCE        ; native mode
     than <code>$130000</code>.</p>
     <p>Likewise, if the memory contents are as follows:</p>
     <ul>
-      <li><code>$120000</code> Contains <code>$20</code></li>
-      <li><code>$12Ffff</code> Contains <code>$C2</code> (A Rep
-      Instruction)</li>
-      <li><code>$130000</code> Contains <code>$30</code></li>
+      <li><code>$120000</code> contains <code>$20</code></li>
+      <li><code>$12FFFF</code> contains <code>$C2</code> (a
+      <code>REP</code> instruction)</li>
+      <li><code>$130000</code> contains <code>$30</code></li>
     </ul>
     <p class="added">then the second byte of the <code>REP</code>
     instruction at <code>$12FFFF</code> is <code>$20</code> (at
@@ -786,12 +783,12 @@ XCE        ; native mode
     <code>$130000</code>); the next instruction to be executed will
     be at <code>$120001</code>, of course.</p>
     <p>It's also worth noting that branches (both forward and
-    backward) wrap at bank boundaries as well. A <code>BCC</code>
-    <code>$FFE0</code> instruction at <code>$130020</code> will
-    branch to <code>$13FFC0</code> rather than
-    <code>$12FFC0</code>. Likewise, a <code>BRL</code>
-    <code>$2000</code> at <code>$13E000</code> will branch to
-    <code>$132000</code> rather than <code>$142000</code>.</p>
+    backward) wrap at bank boundaries as well. A <code>BCC
+    $FFE0</code> instruction at <code>$130020</code> will branch to
+    <code>$13FFC0</code> rather than <code>$12FFC0</code>.
+    Likewise, a <code>BRL $2000</code> at <code>$13E000</code> will
+    branch to <code>$132000</code> rather than
+    <code>$142000</code>.</p>
   </section>
   <section>
     <h3><a id="5" name="5">5 Addressing Modes</a></h3>
@@ -825,18 +822,18 @@ XCE        ; native mode
     65C02. Page boundary wrapping only occurs in the following
     situations:</p>
     <ul>
-      <li>A. When The Dl Register Is <code>$00</code> (and In
-      Emulation Mode -- Both Conditions Must Be Met), The Direct
-      Page Wraps At A Page Boundary</li>
-      <li>B. In Emulation Mode, The Stack Wraps At The Page 1
-      Boundary</li>
+      <li>A. When the DL register is <code>$00</code> (and in
+      emulation mode -- both conditions must be met), the direct
+      page wraps at a page boundary</li>
+      <li>B. In emulation mode, the stack wraps at the page 1
+      boundary</li>
     </ul>
     <p>An example of case A is when the D register is
     <code>$0000</code> (and thus DL is <code>$00</code>), the X
     register is <code>$0001</code>, and the e flag is 1 (i.e.
     emulation mode); in that case the memory location read by
-    <code>LDA</code> <code>$FF</code>,X is <code>$000000</code>
-    rather than <code>$000100</code>.</p>
+    <code>LDA $FF,X</code> is <code>$000000</code> rather than
+    <code>$000100</code>.</p>
     <p>An example of case B is when the S register is
     <code>$01FF</code> and the e flag is 1; in that case, a
     <code>PLA</code> reads (i.e. pulls) from memory location
@@ -845,9 +842,9 @@ XCE        ; native mode
     mode (i.e. this addressing mode was not available on the
     65C02), it does not wrap at a bank boundary under any
     circumstances. Likewise, since <code>PEI</code> is a "new"
-    instruction, <code>PEI</code> <code>$FF</code> does not wrap at
-    a page boundary (either the direct page part, or the (pushing
-    onto the) stack part).</p>
+    instruction, <code>PEI $FF</code> does not wrap at a page
+    boundary (either the direct page part, or the (pushing onto
+    the) stack part).</p>
   </section>
   <section>
     <h3><a id="5.1.2" name="5.1.2">5.1.2 Bank Boundary
@@ -857,17 +854,19 @@ XCE        ; native mode
     following are confined to bank 0 ("confined to" means they
     address bank 0 and wrap at the bank 0 boundary):</p>
     <ul>
-      <li>A. The Direct Page</li>
-      <li>B. The Stack</li>
-      <li>C. [Absolute] and (Absolute) Addressing Modes (Jmp Is The
-      Only Instruction Available For Either Addressing Mode)</li>
+      <li>A. The direct page</li>
+      <li>B. The stack</li>
+      <li>C. [absolute] and (absolute) addressing modes
+      (<code>JMP</code> is the only instruction available for
+      either addressing mode)</li>
     </ul>
     <p class="added">The following are confined to bank K:</p>
     <ul>
-      <li>A. (Absolute,X) Addressing Mode (Jmp and Jsr Are The Only
-      Instructions Available For This Addressing Mode)</li>
-      <li>B. The Program Counter (I.E. The Pc Register); Again,
-      This Means Branches Wrap At The Bank K Boundary</li>
+      <li>A. (absolute,X) addressing mode (<code>JMP</code> and
+      <code>JSR</code> are the only instructions available for this
+      addressing mode)</li>
+      <li>B. The Program Counter (i.e. the PC register); again,
+      this means branches wrap at the bank K boundary</li>
     </ul>
     <p class="added">source,destination addressing (i.e. the
     <code>MVN</code> and <code>MVP</code> instructions) wraps at
@@ -935,9 +934,9 @@ XCE        ; native mode
     <p class="added">shows the formula for the address of the low
     byte of the data (in this case, for long,X addressing).</p>
     <ul>
-      <li>24-Bit Quantities Have High, Middle, and Low Bytes.</li>
-      <li>16-Bit Quantities Have Only High and Low Bytes.</li>
-      <li>8-Bit Quantities Have Only Low Bytes.</li>
+      <li>24-bit quantities have high, middle, and low bytes.</li>
+      <li>16-bit quantities have only high and low bytes.</li>
+      <li>8-bit quantities have only low bytes.</li>
     </ul>
     <p>For example, when the x flag is 1, then <code>LDX</code>
     loads only 8 bits of data, and the formula for the high byte
@@ -949,8 +948,8 @@ XCE        ; native mode
     <code>$000012</code>. If the <code>DBR</code> is
     <code>$AB</code>, and:</p>
     <ul>
-      <li><code>$000012</code> Contains <code>$Ef</code></li>
-      <li><code>$000013</code> Contains <code>$Cd</code></li>
+      <li><code>$000012</code> contains <code>$EF</code></li>
+      <li><code>$000013</code> contains <code>$CD</code></li>
     </ul>
     <p class="added">then the address of the (low byte of the) data
     is <code>$ABCDEF</code>. So, for example:</p>
@@ -965,13 +964,13 @@ XCE        ; native mode
     byte of the pointer. In addition, the following quantities are
     used in the formulas:</p>
     <ul>
-      <li>$Ll = The Low Byte Of The Pointer (I.E. The Byte At
-      Address "Pointer Lo")</li>
-      <li>$Mm = The Middle Byte Of The Pointer (I.E. The Byte At
-      Address "Pointer Mid")</li>
-      <li>$Hh = The High Byte Of The Pointer (I.E. The Byte At
-      Address "Pointer Hi")</li>
-      <li>$Rr = The (Value Of The) Dbr</li>
+      <li>$ll = the low byte of the pointer (i.e. the byte at
+      address "pointer lo")</li>
+      <li>$mm = the middle byte of the pointer (i.e. the byte at
+      address "pointer mid")</li>
+      <li>$hh = the high byte of the pointer (i.e. the byte at
+      address "pointer hi")</li>
+      <li>$rr = the (value of the) <code>DBR</code></li>
     </ul>
     <p>In the previous <code>LDA ($12)</code> example, $ll would be
     <code>$EF</code> (the value of the low byte of the pointer). D,
@@ -1032,12 +1031,11 @@ XCE        ; native mode
       <address-description>data hi</address-description>
     </address>
     <p>Example 1: If the K register is <code>$12</code>, then
-    <code>JMP</code> <code>$FFFF</code> jumps to
-    <code>$12FFFF</code></p>
+    <code>JMP $FFFF</code> jumps to <code>$12FFFF</code></p>
     <p>Example 2: If the <code>DBR</code> is <code>$12</code> and
-    the m flag is 0, then <code>LDA</code> <code>$FFFF</code> loads
-    the low byte of the data from address <code>$12FFFF</code>, and
-    the high byte from address <code>$130000</code></p>
+    the m flag is 0, then <code>LDA $FFFF</code> loads the low byte
+    of the data from address <code>$12FFFF</code>, and the high
+    byte from address <code>$130000</code></p>
   </section>
   <section>
     <h3><a id="5.3" name="5.3">5.3 Absolute,X and
@@ -1072,23 +1070,23 @@ XCE        ; native mode
     </address>
     <p>Example: If the <code>DBR</code> is <code>$12</code>, the X
     register is <code>$000A</code>, and the m flag is 0, then
-    <code>LDA</code> <code>$FFFE</code>,X loads the low byte of the
-    data from address <code>$130008</code>, and the high byte from
-    address <code>$130009</code></p>
+    <code>LDA $FFFE,X</code> loads the low byte of the data from
+    address <code>$130008</code>, and the high byte from address
+    <code>$130009</code></p>
     <p>Note that this is one of the rare instances where emulation
     mode has different behavior than the 65C02 or NMOS 6502. Since
     the 65C02 and NMOS 6502 have a 16-bit address space, when the X
-    register is <code>$80</code>, an <code>LDA</code>
-    <code>$FFC0</code>,X instruction (for example) loads from
-    address <code>$0040</code>; however on the 65C816, it loads
-    from address <code>$010040</code> (rather than address
+    register is <code>$80</code>, an <code>LDA $FFC0,X</code>
+    instruction (for example) loads from address
+    <code>$0040</code>; however on the 65C816, it loads from
+    address <code>$010040</code> (rather than address
     <code>$000040</code>). In practice, this is not a problem since
     65C02 and NMOS 6502 code would almost certainly use an
-    <code>LDA</code> <code>$C0</code>,X instruction (rather than
-    <code>LDA $FFC0,X)</code> because zero page addressing always
-    wraps at the page boundary on a 65C02 and NMOS 6502 (i.e. when
-    the X register is <code>$80</code>, <code>LDA</code>
-    <code>$C0</code>,X loads from address <code>$40</code>).</p>
+    <code>LDA $C0,X</code> instruction (rather than <code>LDA
+    $FFC0,X)</code> because zero page addressing always wraps at
+    the page boundary on a 65C02 and NMOS 6502 (i.e. when the X
+    register is <code>$80</code>, <code>LDA $C0,X</code> loads from
+    address <code>$40</code>).</p>
   </section>
   <section>
     <h3><a id="5.4" name="5.4">5.4 (Absolute) and
@@ -1153,8 +1151,8 @@ XCE        ; native mode
     </address>
     <p>Example: If the K register is <code>$12</code> and</p>
     <ul>
-      <li><code>$000000</code> Contains <code>$34</code></li>
-      <li><code>$00Ffff</code> Contains <code>$56</code></li>
+      <li><code>$000000</code> contains <code>$34</code></li>
+      <li><code>$00FFFF</code> contains <code>$56</code></li>
     </ul>
     <p class="added">then <code>JMP ($FFFF)</code> jumps to
     <code>$123456</code></p>
@@ -1208,8 +1206,8 @@ XCE        ; native mode
     <p>Example: If the K register is <code>$12</code>, the X
     register is <code>$000A</code>, and</p>
     <ul>
-      <li><code>$120008</code> Contains <code>$56</code></li>
-      <li><code>$120009</code> Contains <code>$34</code></li>
+      <li><code>$120008</code> contains <code>$56</code></li>
+      <li><code>$120009</code> contains <code>$34</code></li>
     </ul>
     <p class="added">then <code>JMP ($FFFE,X)</code> jumps to
     <code>$123456</code></p>
@@ -1270,13 +1268,13 @@ ASL A
     </address>
     <p>Example 1: If the D register is <code>$FF00</code> and the e
     flag is 1 (note that this means the m flag must be 1), then
-    <code>LDA</code> <code>$FF</code> loads the low byte of the
-    data from address <code>$00FFFF</code></p>
+    <code>LDA $FF</code> loads the low byte of the data from
+    address <code>$00FFFF</code></p>
     <p>Example 2: If the D register is <code>$FF00</code> and the m
     flag is 0 (note that this means the e flag must be 0), then
-    <code>LDA</code> <code>$FF</code> loads the low byte of the
-    data from address <code>$00FFFF</code>, and the high byte from
-    address <code>$000000</code></p>
+    <code>LDA $FF</code> loads the low byte of the data from
+    address <code>$00FFFF</code>, and the high byte from address
+    <code>$000000</code></p>
   </section>
   <section>
     <h3><a id="5.8" name="5.8">5.8 Direct,X and Direct,Y</a></h3>
@@ -1338,13 +1336,13 @@ ASL A
     </address>
     <p>Example 1: If the D register is <code>$FF00</code>, the X
     register is <code>$000A</code>, and the e flag is 1 (note that
-    this means the m flag must be 1), then <code>LDA</code>
-    <code>$FE</code>,X loads the low byte of the data from address
+    this means the m flag must be 1), then <code>LDA $FE,X</code>
+    loads the low byte of the data from address
     <code>$00FF08</code></p>
     <p>Example 2: If the D register is <code>$FF00</code>, the X
     register is <code>$000A</code>, and the m flag is 0 (note that
-    this means the e flag must be 0), then <code>LDA</code>
-    <code>$FE</code>,X loads the low byte of the data from address
+    this means the e flag must be 0), then <code>LDA $FE,X</code>
+    loads the low byte of the data from address
     <code>$000008</code>, and the high byte from address
     <code>$000009</code></p>
   </section>
@@ -1410,8 +1408,8 @@ ASL A
     byte is <code>$00FF00</code>. Furthermore, if the
     <code>DBR</code> is <code>$12</code> and</p>
     <ul>
-      <li><code>$00Ff00</code> Contains <code>$Ff</code></li>
-      <li><code>$00Ffff</code> Contains <code>$Ff</code></li>
+      <li><code>$00FF00</code> contains <code>$FF</code></li>
+      <li><code>$00FFFF</code> contains <code>$FF</code></li>
     </ul>
     <p class="added">then <code>LDA ($FF)</code> loads the low byte
     of the data from address <code>$12FFFF</code>.</p>
@@ -1422,8 +1420,8 @@ ASL A
     byte is <code>$000000</code>. Furthermore, if the
     <code>DBR</code> is <code>$12</code> and</p>
     <ul>
-      <li><code>$000000</code> Contains <code>$Ff</code></li>
-      <li><code>$00Ffff</code> Contains <code>$Ff</code></li>
+      <li><code>$000000</code> contains <code>$FF</code></li>
+      <li><code>$00FFFF</code> contains <code>$FF</code></li>
     </ul>
     <p class="added">then <code>LDA ($FF)</code> loads the low byte
     of the data from address <code>$12FFFF</code>, and the high
@@ -1476,9 +1474,9 @@ ASL A
     the middle byte is <code>$00FFFF</code>, and the address of the
     high byte is <code>$000000</code>. Furthermore, if</p>
     <ul>
-      <li><code>$000000</code> Contains <code>$12</code></li>
-      <li><code>$00Fffe</code> Contains <code>$Ff</code></li>
-      <li><code>$00Ffff</code> Contains <code>$Ff</code></li>
+      <li><code>$000000</code> contains <code>$12</code></li>
+      <li><code>$00FFFE</code> contains <code>$FF</code></li>
+      <li><code>$00FFFF</code> contains <code>$FF</code></li>
     </ul>
     <p class="added">then <code>LDA [$FE]</code> loads the low byte
     of the data from address <code>$12FFFF</code>, and the high
@@ -1547,8 +1545,8 @@ ASL A
     <code>$00FF09</code>. Furthermore, if the <code>DBR</code> is
     <code>$12</code> and</p>
     <ul>
-      <li><code>$00Ff08</code> Contains <code>$Ff</code></li>
-      <li><code>$00Ff09</code> Contains <code>$Ff</code></li>
+      <li><code>$00FF08</code> contains <code>$FF</code></li>
+      <li><code>$00FF09</code> contains <code>$FF</code></li>
     </ul>
     <p class="added">then <code>LDA ($FE,X)</code> loads the low
     byte of the data from address <code>$12FFFF</code>.</p>
@@ -1560,8 +1558,8 @@ ASL A
     <code>$000009</code>. Furthermore, if the <code>DBR</code> is
     <code>$12</code> and</p>
     <ul>
-      <li><code>$000008</code> Contains <code>$Ff</code></li>
-      <li><code>$000009</code> Contains <code>$Ff</code></li>
+      <li><code>$000008</code> contains <code>$FF</code></li>
+      <li><code>$000009</code> contains <code>$FF</code></li>
     </ul>
     <p class="added">then <code>LDA ($FE,X)</code> loads the low
     byte of the data from address <code>$12FFFF</code>, and the
@@ -1641,8 +1639,8 @@ ASL A
     <code>DBR</code> is <code>$12</code>, the Y register is
     <code>$000A</code>, and</p>
     <ul>
-      <li><code>$00Ff00</code> Contains <code>$Ff</code></li>
-      <li><code>$00Ffff</code> Contains <code>$Fe</code></li>
+      <li><code>$00FF00</code> contains <code>$FF</code></li>
+      <li><code>$00FFFF</code> contains <code>$FE</code></li>
     </ul>
     <p class="added">then <code>LDA ($FF),Y</code> loads the low
     byte of the data from address <code>$130008</code>.</p>
@@ -1654,8 +1652,8 @@ ASL A
     <code>DBR</code> is <code>$12</code>, the Y register is
     <code>$000A</code>, and</p>
     <ul>
-      <li><code>$000000</code> Contains <code>$Ff</code></li>
-      <li><code>$00Ffff</code> Contains <code>$Fe</code></li>
+      <li><code>$000000</code> contains <code>$FF</code></li>
+      <li><code>$00FFFF</code> contains <code>$FE</code></li>
     </ul>
     <p class="added">then <code>LDA ($FF),Y</code> loads the low
     byte of the data from address <code>$130008</code>, and the
@@ -1709,9 +1707,9 @@ ASL A
     address of the high byte is <code>$000000</code>. Furthermore,
     if the Y register is <code>$000A</code>, and</p>
     <ul>
-      <li><code>$000000</code> Contains <code>$12</code></li>
-      <li><code>$00Fffe</code> Contains <code>$Fc</code></li>
-      <li><code>$00Ffff</code> Contains <code>$Ff</code></li>
+      <li><code>$000000</code> contains <code>$12</code></li>
+      <li><code>$00FFFE</code> contains <code>$FC</code></li>
+      <li><code>$00FFFF</code> contains <code>$FF</code></li>
     </ul>
     <p class="added">then <code>LDA [$FE],Y</code> loads the low
     byte of the data from address <code>$130006</code>, and the
@@ -1740,12 +1738,12 @@ ASL A
     <p>The width of the immediate data depends on the instruction.
     There are four cases.</p>
     <ul>
-      <li>A. The Data Width Depends On The Value Of The M Flag
-      (E.G. Lda)</li>
-      <li>B. The Data Width Depends On The Value Of The X Flag
-      (E.G. Ldx)</li>
-      <li>C. The Data Is 8 Bits Wide (E.G. Rep)</li>
-      <li>D. The Data Is 16 Bits Wide (E.G. Pea)</li>
+      <li>A. The data width depends on the value of the m flag
+      (e.g. <code>LDA</code>)</li>
+      <li>B. The data width depends on the value of the x flag
+      (e.g. <code>LDX</code>)</li>
+      <li>C. The data is 8 bits wide (e.g. <code>REP</code>)</li>
+      <li>D. The data is 16 bits wide (e.g. <code>PEA</code>)</li>
     </ul>
     <p>Incidentally, <code>PER</code> is an unusual case. It can be
     considered 16-bit immediate data, like <code>PEA</code>. Unlike
@@ -1795,9 +1793,9 @@ ASL A
       </address-bytes>
       <address-description>data hi</address-description>
     </address>
-    <p>Example: If the m flag is 0, then <code>LDA</code>
-    <code>$12FFFF</code> loads the low byte of the data from
-    address <code>$12FFFF</code>, and the high byte from address
+    <p>Example: If the m flag is 0, then <code>LDA $12FFFF</code>
+    loads the low byte of the data from address
+    <code>$12FFFF</code>, and the high byte from address
     <code>$130000</code>.</p>
   </section>
   <section>
@@ -1817,9 +1815,9 @@ ASL A
       <address-description>data hi</address-description>
     </address>
     <p>Example: If the X register is <code>$000A</code> and the m
-    flag is 0, then <code>LDA</code> <code>$12FFFE</code>,X loads
-    the low byte of the data from address <code>$130008</code>, and
-    the high byte from address <code>$130009</code>.</p>
+    flag is 0, then <code>LDA $12FFFE,X</code> loads the low byte
+    of the data from address <code>$130008</code>, and the high
+    byte from address <code>$130009</code>.</p>
   </section>
   <section>
     <h3><a id="5.18" name="5.18">5.18 Relative8 and
@@ -1894,14 +1892,14 @@ ASL A
     </address>
     <p>Example: If the accumulator is <code>$0002</code>, the X
     register is <code>$FFFE</code>, and the Y register is
-    <code>$FFFF</code>, then <code>MVN</code>
-    <code>#$12</code>,<code>#$34</code> moves</p>
+    <code>$FFFF</code>, then <code>MVN
+    #$12</code>,<code>#$34</code> moves</p>
     <ul>
-      <li>The Data At <code>$12Fffe</code> To
-      <code>$34Ffff</code></li>
-      <li>The Data At <code>$12Ffff</code> To
+      <li>the data at <code>$12FFFE</code> to
+      <code>$34FFFF</code></li>
+      <li>the data at <code>$12FFFF</code> to
       <code>$340000</code></li>
-      <li>The Data At <code>$120000</code> To
+      <li>the data at <code>$120000</code> to
       <code>$340001</code></li>
     </ul>
   </section>
@@ -1924,9 +1922,9 @@ ASL A
       <address-description>data hi</address-description>
     </address>
     <p>Example: If the S register is <code>$FF10</code> and the m
-    flag is 0, then <code>LDA</code> <code>$FA</code>,S loads the
-    low byte of the data from address <code>$00000A</code>, and the
-    high byte from address <code>$00000B</code>.</p>
+    flag is 0, then <code>LDA $FA,S</code> loads the low byte of
+    the data from address <code>$00000A</code>, and the high byte
+    from address <code>$00000B</code>.</p>
   </section>
   <section>
     <h3><a id="5.21" name="5.21">5.21 (Stack,S),Y</a></h3>
@@ -1969,8 +1967,8 @@ ASL A
     if the <code>DBR</code> is <code>$12</code>, the Y register is
     <code>$0050</code>, and</p>
     <ul>
-      <li><code>$00000A</code> Contains <code>$F0</code></li>
-      <li><code>$00000B</code> Contains <code>$Ff</code></li>
+      <li><code>$00000A</code> contains <code>$F0</code></li>
+      <li><code>$00000B</code> contains <code>$FF</code></li>
     </ul>
     <p class="added">then <code>LDA ($FA,S),Y</code> loads the low
     byte of the data from address <code>$130040</code>, and the
@@ -1978,7 +1976,7 @@ ASL A
   </section>
   <section>
     <h3><a id="5.22" name="5.22">5.22 Page and Bank Boundary
-    Wrapping Of The Stack</a></h3>
+    Wrapping of the Stack</a></h3>
     <p>The previous sections covered the addressing of the
     instruction operands. However, some instructions push onto, and
     pull from, the stack. This section covers how the stack itself
@@ -1998,13 +1996,13 @@ ASL A
     S and SL registers before the instruction was executed. After
     pushing N bytes:</p>
     <ul>
-      <li>In Emulation Mode, Sl Will Be Decremented N Times</li>
-      <li>In Native Mode, S Will Be Decremented N Times</li>
+      <li>In emulation mode, SL will be decremented N times</li>
+      <li>In native mode, S will be decremented N times</li>
     </ul>
     <p class="added">Likewise, after pulling N bytes:</p>
     <ul>
-      <li>In Emulation Mode, Sl Will Be Incremented N Times</li>
-      <li>In Native Mode, S Will Be Incremented N Times</li>
+      <li>In emulation mode, SL will be incremented N times</li>
+      <li>In native mode, S will be incremented N times</li>
     </ul>
     <p>For all interrupts and "old" instructions, when the e flag
     is 1, the address of the data for an 8-bit push is:</p>
@@ -2127,12 +2125,12 @@ ASL A
   <section>
     <h3><a id="5.23" name="5.23">5.23 A Note On Operand
     Addresses</a></h3>
-    <p>On the 65C02 and NMOS 6502, <code>LDA</code>
-    <code>$12</code> (direct addressing) and <code>LDA</code>
-    <code>$0012</code> (absolute addressing) load data from the
-    same address. On the 65C816, this is not always the case. For
-    example, if the <code>DBR</code> is <code>$12</code>, the D
-    register is <code>$3400</code>, and the m flag is 1, then</p>
+    <p>On the 65C02 and NMOS 6502, <code>LDA $12</code> (direct
+    addressing) and <code>LDA $0012</code> (absolute addressing)
+    load data from the same address. On the 65C816, this is not
+    always the case. For example, if the <code>DBR</code> is
+    <code>$12</code>, the D register is <code>$3400</code>, and the
+    m flag is 1, then</p>
     <pre>
 LDA $56 (direct addressing) loads data from $003456
 LDA $0056 (absolute addressing) loads data from $120056
@@ -2168,30 +2166,30 @@ SYNTAX - an example of the assembler syntax of the instruction
 </pre>
     <p class="added">In the <code>LEN</code> column:</p>
     <ul>
-      <li>M = M Flag</li>
-      <li>X = X Flag</li>
+      <li>m = m flag</li>
+      <li>x = x flag</li>
     </ul>
     <p>Thus, for example, 3-m is a succinct way of saying 3 bytes
     when the m flag is 0, and 2 bytes when the m flag is 1.</p>
     <p>In the CYCLES column:</p>
     <ul>
-      <li>E = E Flag</li>
-      <li>M = M Flag</li>
-      <li>P = 1 If A Page Boundary Is Crossed, 0 Otherwise</li>
-      <li>T = 1 If Branch Taken, 0 Otherwise</li>
-      <li>W = 0 If The Dl Register Is <code>$00</code>, 1
-      Otherwise</li>
-      <li>X = X Flag</li>
+      <li>e = e flag</li>
+      <li>m = m flag</li>
+      <li>p = 1 if a page boundary is crossed, 0 otherwise</li>
+      <li>t = 1 if branch taken, 0 otherwise</li>
+      <li>w = 0 if the DL register is <code>$00</code>, 1
+      otherwise</li>
+      <li>x = x flag</li>
     </ul>
     <p>Again, for example, 3-m is a succinct way of saying 3 cycles
     when the m flag is 0, and 2 cycles when the m flag is 1.</p>
     <p>In the "nvmxdizc e" column:</p>
     <ul>
-      <li>0 = Flag Is Cleared</li>
-      <li>1 = Flag Is Set</li>
-      <li>* = Flag Is Affected</li>
-      <li>M = Flag Is Affected By The (16-8*M)-Bit Result</li>
-      <li>X = Flag Is Affected By The (16-8*X)-Bit Result</li>
+      <li>0 = flag is cleared</li>
+      <li>1 = flag is set</li>
+      <li>* = flag is affected</li>
+      <li>m = flag is affected by the (16-8*m)-bit result</li>
+      <li>x = flag is affected by the (16-8*x)-bit result</li>
     </ul>
     <p>For example, the m in the z column of <code>ADC</code> means
     that the z flag is affected by the 16-bit result when the m
@@ -2199,10 +2197,10 @@ SYNTAX - an example of the assembler syntax of the instruction
     <p>In general, in emulation mode (and for 8-bit results in
     native mode), the 65C816 has the same behavior as 65C02 but the
     same cycle counts as the NMOS 6502. For example, when the d
-    flag is 1 and the m flag is 1, <code>ADC</code>
-    <code>#$00</code> will have valid n, z, and c flag results
-    (like the 65C02, but unlike the NMOS 6502), but will take 2
-    cycles (like the NMOS 6502, but unlike the 65C02).</p>
+    flag is 1 and the m flag is 1, <code>ADC #$00</code> will have
+    valid n, z, and c flag results (like the 65C02, but unlike the
+    NMOS 6502), but will take 2 cycles (like the NMOS 6502, but
+    unlike the 65C02).</p>
     <p>Note that the cycle counts may look a little different than
     what you may be used to with the 65C02 or NMOS 6502, even when
     the cycle count is the same for 8-bit results. For example,
@@ -2480,45 +2478,45 @@ SuBtract with Carry
     (i.e. when the d flag is 1) takes no additional cycles.</p>
     <p>The formula for <code>ADC</code> is:</p>
     <ul>
-      <li>Accumulator = Accumulator + Data + Carry</li>
+      <li>accumulator = accumulator + data + carry</li>
     </ul>
     <p class="added">The formula for <code>SBC</code> can be
     written several ways; one way is:</p>
     <ul>
-      <li>Accumulator = Accumulator - Data - 1 + Carry</li>
+      <li>accumulator = accumulator - data - 1 + carry</li>
     </ul>
     <p>In other words, the formula is accumulator = accumulator -
     data - 1 when the carry (i.e. the c flag) is 0, and accumulator
     = accumulator - data when the carry is 1.</p>
     <p>When the d flag is 0:</p>
     <ul>
-      <li>The N Flag Is 0 When The High Bit Of The Result (Bit 15
-      When The M Flag Is 0, Bit 7 When The M Flag Is 1) Is 0, and
-      The N Flag Is 1 When The High Bit Of The Result Is 1.</li>
-      <li>The V Flag Is 0 When There Is Not A Signed Arithmetic
-      Overflow, and The V Flag Is 1 When There Is A Signed
-      Arithmetic Overflow. For 8-Bit Signed Numbers,
-      <code>$00</code> To <code>$7F</code> Represents 0 To 127, and
-      <code>$80</code> To <code>$Ff</code> Represents -128 To -1;
-      An 8-Bit Arithmetic Overflow Occurs When The Result Is
-      Outside The Range -128 To 127. For 16-Bit Signed Numbers,
-      <code>$0000</code> To <code>$7Fff</code> Represents 0 To
-      32767, and <code>$8000</code> To <code>$Ffff</code>
-      Represents -32768 To -1; A 16-Bit Arithmetic Overflow Occurs
-      When The Result Is Outside The Range -32768 To 32767.</li>
-      <li>The Z Flag Is 0 When The 16-Bit (When M Flag Is 0) Or
-      8-Bit (When The M Flag Is 1) Result Is Nonzero, and The Z
-      Flag Is 1 When The Result Is Zero.</li>
-      <li>The C Flag Is 0 When There Is Not An Unsigned Carry, and
-      The C Flag Is 1 When There Is An Unsigned Carry. For 8-Bit
-      Unsigned Numbers, <code>$00</code> To <code>$Ff</code>
-      Represents 0 To 255; For Addition, An 8-Bit Carry Occurs When
-      The Result Is Greater Than 255. For 16-Bit Unsigned Numbers,
-      <code>$0000</code> To <code>$Ffff</code> Represents 0 To
-      65535; For Addition, An 16-Bit Carry Occurs When The Result
-      Is Greater Than 65535. For Subtraction (8-Bit Or 16-Bit),
-      There Is A Carry When The Accumulator Is Greater Than Or
-      Equal To The Data.</li>
+      <li>The n flag is 0 when the high bit of the result (bit 15
+      when the m flag is 0, bit 7 when the m flag is 1) is 0, and
+      the n flag is 1 when the high bit of the result is 1.</li>
+      <li>The v flag is 0 when there is not a signed arithmetic
+      overflow, and the v flag is 1 when there is a signed
+      arithmetic overflow. For 8-bit signed numbers,
+      <code>$00</code> to <code>$7F</code> represents 0 to 127, and
+      <code>$80</code> to <code>$FF</code> represents -128 to -1;
+      an 8-bit arithmetic overflow occurs when the result is
+      outside the range -128 to 127. For 16-bit signed numbers,
+      <code>$0000</code> to <code>$7FFF</code> represents 0 to
+      32767, and <code>$8000</code> to <code>$FFFF</code>
+      represents -32768 to -1; a 16-bit arithmetic overflow occurs
+      when the result is outside the range -32768 to 32767.</li>
+      <li>The z flag is 0 when the 16-bit (when m flag is 0) or
+      8-bit (when the m flag is 1) result is nonzero, and the z
+      flag is 1 when the result is zero.</li>
+      <li>The c flag is 0 when there is not an unsigned carry, and
+      the c flag is 1 when there is an unsigned carry. For 8-bit
+      unsigned numbers, <code>$00</code> to <code>$FF</code>
+      represents 0 to 255; for addition, an 8-bit carry occurs when
+      the result is greater than 255. For 16-bit unsigned numbers,
+      <code>$0000</code> to <code>$FFFF</code> represents 0 to
+      65535; for addition, an 16-bit carry occurs when the result
+      is greater than 65535. For subtraction (8-bit or 16-bit),
+      there is a carry when the accumulator is greater than or
+      equal to the data.</li>
     </ul>
     <p>When the d flag is 1, the n, z, and c flags have the same
     meaning (i.e. the n flag reflects the high bit of the result,
@@ -2530,22 +2528,22 @@ SuBtract with Carry
     overflow.</p>
     <p>Example 1: If the accumulator is <code>$0001</code>, the m
     flag is 0, the d flag is 0, and the c flag is 1, then after
-    <code>SBC</code> <code>#$2003</code></p>
+    <code>SBC #$2003</code></p>
     <ul>
-      <li>The Accumulator Will Be <code>$Dffe</code></li>
-      <li>The N Flag Will Be 1</li>
-      <li>The V Flag Will Be 0</li>
-      <li>The Z Flag Will Be 0</li>
-      <li>The C Flag Will Be 0</li>
+      <li>the accumulator will be <code>$DFFE</code></li>
+      <li>the n flag will be 1</li>
+      <li>the v flag will be 0</li>
+      <li>the z flag will be 0</li>
+      <li>the c flag will be 0</li>
     </ul>
     <p>Example 2: If the accumulator is <code>$0001</code>, the m
     flag is 0, the d flag is 1, and the c flag is 1, then after
-    <code>SBC</code> <code>#$2003</code></p>
+    <code>SBC #$2003</code></p>
     <ul>
-      <li>The Accumulator Will Be <code>$7998</code></li>
-      <li>The N Flag Will Be 0</li>
-      <li>The Z Flag Will Be 0</li>
-      <li>The C Flag Will Be 0</li>
+      <li>the accumulator will be <code>$7998</code></li>
+      <li>the n flag will be 0</li>
+      <li>the z flag will be 0</li>
+      <li>the c flag will be 0</li>
     </ul>
   </section>
   <section>
@@ -2747,33 +2745,33 @@ ComPare to Y register
     when the x flag is 1.</p>
     <p><code>CMP</code> is similar to <code>SBC</code>, except:</p>
     <ul>
-      <li>A. It Is Always A Binary Subtraction (I.E. Sbc As Though
-      The D Flag Was 0)</li>
-      <li>B. It Does Not Include The Carry In The Formula (I.E.
-      Register - Data; In Other Words, Sbc As Though The Carry Was
-      Set Before The Sbc)</li>
-      <li>C. The V Flag Is Not Affected</li>
-      <li>D. The Result Is Only Reflected In The N, Z, and C Flags;
-      The Accumulator, X Register, and Y Register Are Left
-      Unchanged.</li>
+      <li>A. It is always a binary subtraction (i.e.
+      <code>SBC</code> as though the d flag was 0)</li>
+      <li>B. It does not include the carry in the formula (i.e.
+      register - data; in other words, <code>SBC</code> as though
+      the carry was set before the <code>SBC</code>)</li>
+      <li>C. The v flag is not affected</li>
+      <li>D. The result is only reflected in the n, z, and c flags;
+      the accumulator, X register, and Y register are left
+      unchanged.</li>
     </ul>
     <p>Likewise for <code>CPX</code> and <code>CPY</code>, except
     the X and Y registers, respectively, are used instead of the
     accumulator.</p>
     <ul>
-      <li>The N Flag Reflects The High Bit Of The Result.</li>
-      <li>The Z Flag Reflects Whether The Result Is Zero.</li>
-      <li>The C Flag Is 0 When The Register (Accumulator, X
-      Register, Or Y Register) Is Less Than The Data, and The C
-      Flag Is 1 When The Register Is Greater Than Or Equal To The
-      Data.</li>
+      <li>The n flag reflects the high bit of the result.</li>
+      <li>The z flag reflects whether the result is zero.</li>
+      <li>The c flag is 0 when the register (accumulator, X
+      register, or Y register) is less than the data, and the c
+      flag is 1 when the register is greater than or equal to the
+      data.</li>
     </ul>
     <p>Example: If the accumulator is <code>$1234</code> and the m
-    flag is 0, then after <code>CMP</code> <code>#$1234</code></p>
+    flag is 0, then after <code>CMP #$1234</code></p>
     <ul>
-      <li>The N Flag Will Be 0</li>
-      <li>The Z Flag Will Be 1</li>
-      <li>The C Flag Will Be 1</li>
+      <li>The n flag will be 0</li>
+      <li>The z flag will be 1</li>
+      <li>The c flag will be 1</li>
     </ul>
   </section>
   <section>
@@ -2949,15 +2947,15 @@ INC A
     and cannot be used in source code.</p>
     <p>For all 6 instructions:</p>
     <ul>
-      <li>The N Flag Reflects The High Bit Of The Result.</li>
-      <li>The Z Flag Reflects Whether The Result Is Zero.</li>
+      <li>The n flag reflects the high bit of the result.</li>
+      <li>The z flag reflects whether the result is zero.</li>
     </ul>
     <p>Example: If the X register is <code>$7FFF</code> and the x
     flag is 0, then after <code>INX</code></p>
     <ul>
-      <li>The X Register Will Be <code>$8000</code></li>
-      <li>The N Flag Will Be 1</li>
-      <li>The Z Flag Will Be 0</li>
+      <li>the X register will be <code>$8000</code></li>
+      <li>the n flag will be 1</li>
+      <li>the z flag will be 0</li>
     </ul>
   </section>
   <section>
@@ -3363,15 +3361,15 @@ bitwise OR Accumulator
     will be 1. And so on for bits 1, 2, 3, etc.</p>
     <p>For all 3 instructions:</p>
     <ul>
-      <li>The N Flag Reflects The High Bit Of The Result.</li>
-      <li>The Z Flag Reflects Whether The Result Is Zero.</li>
+      <li>The n flag reflects the high bit of the result.</li>
+      <li>The z flag reflects whether the result is zero.</li>
     </ul>
     <p>Example: If the accumulator is <code>$0F06</code> and the m
-    flag is 0, then after <code>EOR</code> <code>#$F103</code></p>
+    flag is 0, then after <code>EOR #$F103</code></p>
     <ul>
-      <li>The Accumulator Will Be <code>$Fe05</code></li>
-      <li>The N Flag Will Be 1</li>
-      <li>The Z Flag Will Be 0</li>
+      <li>the accumulator will be <code>$FE05</code></li>
+      <li>the n flag will be 1</li>
+      <li>the z flag will be 0</li>
     </ul>
   </section>
   <section>
@@ -3449,27 +3447,26 @@ bitwise OR Accumulator
     family where the flags affected depends on the addressing
     mode.</p>
     <ul>
-      <li>The N Flag Reflects The High Bit Of The Data (Note: Just
-      The Data, Not The Bitwise and Of The Accumulator and The
-      Data).</li>
-      <li>The V Flag Reflects The Second Highest Bit Of The Data
-      (I.E. Bit 14 Of The Data When The M Flag Is 0, and Bit 6 Of
-      The Data When The M Flag Is 1, and Again, Just The Data, Not
-      The Bitwise and).</li>
-      <li>The Z Flag Reflects Whether The Result (Of The Bitwise
-      and) Is Zero.</li>
+      <li>The n flag reflects the high bit of the data (note: just
+      the data, not the bitwise And of the accumulator and the
+      data).</li>
+      <li>The v flag reflects the second highest bit of the data
+      (i.e. bit 14 of the data when the m flag is 0, and bit 6 of
+      the data when the m flag is 1, and again, just the data, not
+      the bitwise And).</li>
+      <li>The z flag reflects whether the result (of the bitwise
+      And) is zero.</li>
     </ul>
     <p>Example: If the accumulator is <code>$43</code>, the
     <code>DBR</code> is <code>$12</code>, the m flag is 1, and</p>
     <ul>
-      <li><code>$12Abcd</code> Contains <code>$9C</code></li>
+      <li><code>$12ABCD</code> contains <code>$9C</code></li>
     </ul>
-    <p class="added">then after <code>BIT</code>
-    <code>$ABCD</code></p>
+    <p class="added">then after <code>BIT $ABCD</code></p>
     <ul>
-      <li>The N Flag Will Be 1</li>
-      <li>The V Flag Will Be 0</li>
-      <li>The Z Flag Will Be 1</li>
+      <li>the n flag will be 1</li>
+      <li>the v flag will be 0</li>
+      <li>the z flag will be 1</li>
     </ul>
   </section>
   <section>
@@ -3539,19 +3536,18 @@ Test and Set Bits
     sets bits 0, 1, and 6 of the data and does not affect the other
     bits.</p>
     <ul>
-      <li>The Z Flag Reflects Whether The Result (Of The Bitwise
-      and) Is Zero.</li>
+      <li>The z flag reflects whether the result (of the bitwise
+      And) is zero.</li>
     </ul>
     <p>Example: If the accumulator is <code>$43</code>, the
     <code>DBR</code> is <code>$12</code>, the m flag is 1, and</p>
     <ul>
-      <li><code>$12Abcd</code> Contains <code>$9C</code></li>
+      <li><code>$12ABCD</code> contains <code>$9C</code></li>
     </ul>
-    <p class="added">then after <code>TSB</code>
-    <code>$ABCD</code></p>
+    <p class="added">then after <code>TSB $ABCD</code></p>
     <ul>
-      <li>The Z Flag Will Be 1</li>
-      <li><code>$12Abcd</code> Will Contain <code>$Df</code></li>
+      <li>the z flag will be 1</li>
+      <li><code>$12ABCD</code> will contain <code>$DF</code></li>
     </ul>
   </section>
   <section>
@@ -3760,8 +3756,8 @@ ROtate Right
     (result).</p>
     <p>For all 4 instructions:</p>
     <ul>
-      <li>The N Flag Reflects The High Bit Of The Result.</li>
-      <li>The Z Flag Reflects Whether The Result Is Zero.</li>
+      <li>The n flag reflects the high bit of the result.</li>
+      <li>The z flag reflects whether the result is zero.</li>
     </ul>
     <p>Assemblers may require or permit the following syntaxes for
     accumulator addressing</p>
@@ -3788,15 +3784,14 @@ ROR A
     <p>Example: If the <code>DBR</code> is <code>$12</code>, the m
     flag is 1, and</p>
     <ul>
-      <li><code>$12Abcd</code> Contains <code>$8F</code></li>
+      <li><code>$12ABCD</code> contains <code>$8F</code></li>
     </ul>
-    <p class="added">then after <code>ASL</code>
-    <code>$ABCD</code></p>
+    <p class="added">then after <code>ASL $ABCD</code></p>
     <ul>
-      <li><code>$12Abcd</code> Will Contain <code>$1E</code></li>
-      <li>The N Flag Will Be 0</li>
-      <li>The Z Flag Will Be 0</li>
-      <li>The C Flag Will Be 1</li>
+      <li><code>$12ABCD</code> will contain <code>$1E</code></li>
+      <li>the n flag will be 0</li>
+      <li>the z flag will be 0</li>
+      <li>the c flag will be 1</li>
     </ul>
   </section>
   <section>
@@ -3946,11 +3941,10 @@ BVS branches if the v flag is 1
     <p>Note that <code>BRA</code> actually has the same timing as
     the other instructions; the cycle count formula is different
     because there is no branch not taken case.</p>
-    <p>Example: If the z flag is 0, then a <code>BNE</code>
-    <code>$C023</code> at <code>$ABC000</code> will branch to
-    <code>$ABC023</code>. (The displacement is <code>$21</code>
-    since the instruction after the <code>BNE</code> is at
-    <code>$ABC002</code>.)</p>
+    <p>Example: If the z flag is 0, then a <code>BNE $C023</code>
+    at <code>$ABC000</code> will branch to <code>$ABC023</code>.
+    (The displacement is <code>$21</code> since the instruction
+    after the <code>BNE</code> is at <code>$ABC002</code>.)</p>
   </section>
   <section>
     <h3><a id="6.2.1.2" name="6.2.1.2">6.2.1.2
@@ -3993,10 +3987,10 @@ BRanch Long
     section of code, or even an entire program) that can run no
     matter what address it is located at (in other words, its
     address isn't known until run time).</p>
-    <p>Example: A <code>BRL</code> <code>$C045</code> at
-    <code>$ABC000</code> will branch to <code>$ABC045</code>. (The
-    displacement is <code>$0042</code> since the instruction after
-    the <code>BRL</code> is at <code>$ABC003</code>.)</p>
+    <p>Example: A <code>BRL $C045</code> at <code>$ABC000</code>
+    will branch to <code>$ABC045</code>. (The displacement is
+    <code>$0042</code> since the instruction after the
+    <code>BRL</code> is at <code>$ABC003</code>.)</p>
   </section>
   <section>
     <h3><a id="6.2.2.1" name="6.2.2.1">6.2.2.1 <code>JMP</code>
@@ -4127,14 +4121,14 @@ Jump to SubRoutine
     for long addressing) can result in code that is quite difficult
     to follow and/or debug.</p>
     <p>Example: If the S register is <code>$01FF</code>, then a
-    <code>JSR</code> <code>$ABCD</code> at <code>$123456</code></p>
+    <code>JSR $ABCD</code> at <code>$123456</code></p>
     <ul>
-      <li>Stores <code>$34</code> At <code>$0001Ff</code></li>
-      <li>Stores <code>$58</code> At <code>$0001Fe</code></li>
+      <li>stores <code>$34</code> at <code>$0001FF</code></li>
+      <li>stores <code>$58</code> at <code>$0001FE</code></li>
     </ul>
     <p class="added">then jumps to <code>$12ABCD</code>, and</p>
     <ul>
-      <li>The S Register Will Be <code>$01Fd</code></li>
+      <li>the S register will be <code>$01FD</code></li>
     </ul>
   </section>
   <section>
@@ -4190,13 +4184,13 @@ ReTurn from Subroutine
     <p>Example: if the K register is <code>$12</code>, the S
     register is <code>$01FD</code>, and</p>
     <ul>
-      <li><code>$0001Fe</code> Contains <code>$56</code></li>
-      <li><code>$0001Ff</code> Contains <code>$34</code></li>
+      <li><code>$0001FE</code> contains <code>$56</code></li>
+      <li><code>$0001FF</code> contains <code>$34</code></li>
     </ul>
     <p class="added">then an <code>RTS</code> will return to
     <code>$123457</code>, and</p>
     <ul>
-      <li>The S Register Will Be <code>$01Ff</code></li>
+      <li>the S register will be <code>$01FF</code></li>
     </ul>
   </section>
   <section>
@@ -4266,11 +4260,11 @@ BRK and COP are software interrupts.
     will wrap at the page 1 boundary (in other words, it is treated
     as an "old" instruction, rather than a "new" instruction).</p>
     <ul>
-      <li>The I Flag Is Set After Pushing The P Register;
-      Furthermore, Like The 65C02 (But Unlike The Nmos 6502), The D
-      Flag Is Cleared After Pushing The P Register, Thus Ensuring
-      That The D Flag Has A Known Value (I.E. Zero) For Brk and Cop
-      Handlers.</li>
+      <li>The i flag is set after pushing the P register;
+      furthermore, like the 65C02 (but unlike the NMOS 6502), the d
+      flag is cleared after pushing the P register, thus ensuring
+      that the d flag has a known value (i.e. zero) for
+      <code>BRK</code> and <code>COP</code> handlers.</li>
     </ul>
     <p>An important note: as on the NMOS 6502 and 65C02, the
     correct way for an emulation mode
@@ -4356,22 +4350,22 @@ EMULATION_BRKIRQ_HANDLER
     <p>Example: If the S register is <code>$01FF</code>, the e flag
     is 0, the P register is <code>$08</code>, and</p>
     <ul>
-      <li><code>$00Ffe6</code> Contains <code>$Ab</code></li>
-      <li><code>$00Ffe7</code> Contains <code>$Cd</code></li>
+      <li><code>$00FFE6</code> contains <code>$AB</code></li>
+      <li><code>$00FFE7</code> contains <code>$CD</code></li>
     </ul>
     <p class="added">then a <code>BRK</code> at
     <code>$123456</code></p>
     <ul>
-      <li>Stores <code>$12</code> At <code>$0001Ff</code></li>
-      <li>Stores <code>$34</code> At <code>$0001Fe</code></li>
-      <li>Stores <code>$58</code> At <code>$0001Fd</code></li>
-      <li>Stores <code>$08</code> At <code>$0001Fc</code></li>
+      <li>stores <code>$12</code> at <code>$0001FF</code></li>
+      <li>stores <code>$34</code> at <code>$0001FE</code></li>
+      <li>stores <code>$58</code> at <code>$0001FD</code></li>
+      <li>stores <code>$08</code> at <code>$0001FC</code></li>
     </ul>
     <p class="added">then jumps to <code>$00CDAB</code>, and</p>
     <ul>
-      <li>The S Register Will Be <code>$01Fb</code></li>
-      <li>The D Flag Will Be 0</li>
-      <li>The I Flag Will Be 1</li>
+      <li>the S register will be <code>$01FB</code></li>
+      <li>the d flag will be 0</li>
+      <li>the i flag will be 1</li>
     </ul>
   </section>
   <section>
@@ -4473,29 +4467,29 @@ EMULATION_BRKIRQ_HANDLER
     <p>Example: If the S register is <code>$01FF</code>, the e flag
     is 0, the P register is <code>$08</code>, and</p>
     <ul>
-      <li><code>$00Ffe6</code> Contains <code>$Ab</code></li>
-      <li><code>$00Ffe7</code> Contains <code>$Cd</code></li>
+      <li><code>$00FFE6</code> contains <code>$AB</code></li>
+      <li><code>$00FFE7</code> contains <code>$CD</code></li>
     </ul>
     <p class="added">and an <code>NMI</code> occurs after the first
-    cycle of a <code>LDA</code> <code>#$1122</code> instruction at
+    cycle of a <code>LDA #$1122</code> instruction at
     <code>$345678</code>, then the <code>LDA</code> instruction
     will be completed, then</p>
     <ul>
-      <li><code>$34</code> Will Be Stored At
-      <code>$0001Ff</code></li>
-      <li><code>$56</code> Will Be Stored At
-      <code>$0001Fe</code></li>
-      <li><code>$7B</code> Will Be Stored At
-      <code>$0001Fd</code></li>
-      <li><code>$08</code> Will Be Stored At
-      <code>$0001Fc</code></li>
+      <li><code>$34</code> will be stored at
+      <code>$0001FF</code></li>
+      <li><code>$56</code> will be stored at
+      <code>$0001FE</code></li>
+      <li><code>$7B</code> will be stored at
+      <code>$0001FD</code></li>
+      <li><code>$08</code> will be stored at
+      <code>$0001FC</code></li>
     </ul>
     <p class="added">then the 65C816 will jump to
     <code>$00CDAB</code>; afterwards</p>
     <ul>
-      <li>The S Register Will Be <code>$01Fb</code></li>
-      <li>The D Flag Will Be 0</li>
-      <li>The I Flag Will Be 1</li>
+      <li>the S register will be <code>$01FB</code></li>
+      <li>the d flag will be 0</li>
+      <li>the i flag will be 1</li>
     </ul>
   </section>
   <section>
@@ -4542,16 +4536,16 @@ ReTurn from Interrupt
     <p>Example: If the S register is <code>$01FB</code>, the e flag
     is 0, and</p>
     <ul>
-      <li><code>$0001Fc</code> Contains <code>$08</code></li>
-      <li><code>$0001Fd</code> Contains <code>$12</code></li>
-      <li><code>$0001Fe</code> Contains <code>$34</code></li>
-      <li><code>$0001Ff</code> Contains <code>$56</code></li>
+      <li><code>$0001FC</code> contains <code>$08</code></li>
+      <li><code>$0001FD</code> contains <code>$12</code></li>
+      <li><code>$0001FE</code> contains <code>$34</code></li>
+      <li><code>$0001FF</code> contains <code>$56</code></li>
     </ul>
     <p class="added">then an <code>RTI</code> will jump to
     <code>$563412</code>, and</p>
     <ul>
-      <li>The S Register Will Be <code>$01Ff</code></li>
-      <li>The P Register Will Be <code>$08</code></li>
+      <li>the S register will be <code>$01FF</code></li>
+      <li>the P register will be <code>$08</code></li>
     </ul>
   </section>
   <section>
@@ -4649,7 +4643,7 @@ SEt Interrupt disable
     doesn't) or enable interrupts (it does).</p>
     <p>Example: after a <code>CLC</code></p>
     <ul>
-      <li>The C Flag Is 0</li>
+      <li>the c flag is 0</li>
     </ul>
   </section>
   <section>
@@ -4700,11 +4694,11 @@ SEt Processor status bits
     <p>Note that when the e flag is 1, the m and x flag are forced
     to 1, so after the <code>REP</code> or <code>SEP</code>, both
     flags will still be 1 no matter what the operand is.</p>
-    <p>Example: If the e flag is 0, then after <code>SEP</code>
-    <code>#$21</code></p>
+    <p>Example: If the e flag is 0, then after <code>SEP
+    #$21</code></p>
     <ul>
-      <li>The M and C Flags Will Be 1</li>
-      <li>The N, V, X, D, I, and Z Flags Will Not Be Affected</li>
+      <li>the m and c flags will be 1</li>
+      <li>the n, v, x, d, i, and z flags will not be affected</li>
     </ul>
   </section>
   <section>
@@ -5147,15 +5141,14 @@ STore Zero
     result is zero, and 0 when the result is nonzero.</p>
     <p>Example: If the m flag is 0, and</p>
     <ul>
-      <li><code>$123456</code> Contains <code>$Ab</code></li>
-      <li><code>$123457</code> Contains <code>$Cd</code></li>
+      <li><code>$123456</code> contains <code>$AB</code></li>
+      <li><code>$123457</code> contains <code>$CD</code></li>
     </ul>
-    <p class="added">then after a <code>LDA</code>
-    <code>$123456</code></p>
+    <p class="added">then after a <code>LDA $123456</code></p>
     <ul>
-      <li>The Accumulator Will Be <code>$Cdab</code></li>
-      <li>The N Flag Will Be 1</li>
-      <li>The Z Flag Will Be 0</li>
+      <li>the accumulator will be <code>$CDAB</code></li>
+      <li>the n flag will be 1</li>
+      <li>the z flag will be 0</li>
     </ul>
   </section>
   <section>
@@ -5271,33 +5264,32 @@ MoVe memory Positive
     register is <code>$1000</code>, the Y register is
     <code>$1002</code>, and</p>
     <ul>
-      <li><code>$001000</code> Contains <code>$Ab</code></li>
-      <li><code>$001001</code> Contains <code>$Cd</code></li>
+      <li><code>$001000</code> contains <code>$AB</code></li>
+      <li><code>$001001</code> contains <code>$CD</code></li>
     </ul>
     <p class="added">then after an <code>MVN</code> #0,#0</p>
     <ul>
-      <li><code>$001002</code> Will Contain <code>$Ab</code></li>
-      <li><code>$001003</code> Will Contain <code>$Cd</code></li>
-      <li><code>$001004</code> Will Contain <code>$Ab</code></li>
-      <li><code>$001005</code> Will Contain <code>$Cd</code></li>
+      <li><code>$001002</code> will contain <code>$AB</code></li>
+      <li><code>$001003</code> will contain <code>$CD</code></li>
+      <li><code>$001004</code> will contain <code>$AB</code></li>
+      <li><code>$001005</code> will contain <code>$CD</code></li>
     </ul>
     <p>This happens because</p>
     <ul>
-      <li>The Byte At <code>$001000</code> (<code>$Ab</code>) Is
-      Stored At <code>$001002</code></li>
-      <li>The Byte At <code>$001001</code> (<code>$Cd</code>) Is
-      Stored At <code>$001003</code></li>
-      <li>The Byte At <code>$001002</code> (Which Now Contains
-      <code>$Ab</code>) Is Stored At <code>$001004</code></li>
-      <li>The Byte At <code>$001003</code> (Which Now Contains
-      <code>$Cd</code>) Is Stored At <code>$001005</code></li>
+      <li>the byte at <code>$001000</code> (<code>$AB</code>) is
+      stored at <code>$001002</code></li>
+      <li>the byte at <code>$001001</code> (<code>$CD</code>) is
+      stored at <code>$001003</code></li>
+      <li>the byte at <code>$001002</code> (which now contains
+      <code>$AB</code>) is stored at <code>$001004</code></li>
+      <li>the byte at <code>$001003</code> (which now contains
+      <code>$CD</code>) is stored at <code>$001005</code></li>
     </ul>
     <p>Incidentally, some assemblers allow an alternate syntax (in
     addition to the traditional syntax of a pair of 8-bit banks)
     where the operand is a pair of 24-bit addresses; thus, for such
-    assemblers, <code>MVN</code>
-    <code>#$123456</code>,<code>#$789ABC</code> is equivalent to
-    <code>MVN</code> <code>#$12</code>,<code>#$78</code>.</p>
+    assemblers, <code>MVN #$123456</code>,<code>#$789ABC</code> is
+    equivalent to <code>MVN #$12</code>,<code>#$78</code>.</p>
     <p>Finally, note that while <code>MVN</code> and
     <code>MVP</code> can be used when the x flag is 1 (and this
     includes the case when the e flag is 1), neither instruction is
@@ -5310,17 +5302,17 @@ MoVe memory Positive
     register is <code>$1000</code>, the Y register is
     <code>$2000</code>, and</p>
     <ul>
-      <li><code>$000Fff</code> Contains <code>$Ab</code></li>
-      <li><code>$001000</code> Contains <code>$Cd</code></li>
+      <li><code>$000FFF</code> contains <code>$AB</code></li>
+      <li><code>$001000</code> contains <code>$CD</code></li>
     </ul>
     <p class="added">then after an <code>MVP</code> #0,#0</p>
     <ul>
-      <li>The Accumulator Will Be <code>$Ffff</code></li>
-      <li>The X Register Will Be <code>$0Ffe</code></li>
-      <li>The Y Register Will Be <code>$1Ffe</code></li>
-      <li>The Dbr Will Be <code>$00</code></li>
-      <li><code>$001Fff</code> Will Contain <code>$Ab</code></li>
-      <li><code>$002000</code> Will Contain <code>$Cd</code></li>
+      <li>the accumulator will be <code>$FFFF</code></li>
+      <li>the X register will be <code>$0FFE</code></li>
+      <li>the Y register will be <code>$1FFE</code></li>
+      <li>the <code>DBR</code> will be <code>$00</code></li>
+      <li><code>$001FFF</code> will contain <code>$AB</code></li>
+      <li><code>$002000</code> will contain <code>$CD</code></li>
     </ul>
   </section>
   <section>
@@ -5445,34 +5437,32 @@ Push Effective Relative address
     need not be an address; it could be a constant. Because of the
     names, the operand syntax permitted (or required) can vary from
     assembler to assembler.</p>
-    <p><code>PEA</code> <code>#$1234</code> is the syntax that is
-    most consistent with the operation of the instruction, since it
+    <p><code>PEA #$1234</code> is the syntax that is most
+    consistent with the operation of the instruction, since it
     simply pushes the value <code>$1234</code>, but does not access
     memory location <code>$1234</code> (in any bank). This is
-    analogous to <code>LDA</code> <code>#$1234</code> vs.
-    <code>LDA</code> <code>$1234</code>; the former does not access
-    memory location <code>$1234</code> (in any bank), but the
-    latter does (in some bank). Nonetheless, some assemblers permit
-    (or require) the syntax <code>PEA</code>
-    <code>$1234</code>.</p>
-    <p>Likewise, <code>PEI</code> <code>$12</code> is the syntax
-    that is most consistent with the operation of the instruction.
-    It pushes the same 16-bit value that (assuming the m flag is 0)
-    <code>LDA</code> <code>$12</code> loads into the accumulator,
-    rather that the value that <code>LDA ($12)</code> loads into
-    the accumulator. Nonetheless, some assemblers permit (or
-    require) the syntax <code>PEI ($12)</code>. Note, however, that
-    <code>PEI</code> always pushes a 16-bit value no matter what
-    the value of the m flag (or, for that matter the x flag)
-    is.</p>
+    analogous to <code>LDA #$1234</code> vs. <code>LDA
+    $1234</code>; the former does not access memory location
+    <code>$1234</code> (in any bank), but the latter does (in some
+    bank). Nonetheless, some assemblers permit (or require) the
+    syntax <code>PEA $1234</code>.</p>
+    <p>Likewise, <code>PEI $12</code> is the syntax that is most
+    consistent with the operation of the instruction. It pushes the
+    same 16-bit value that (assuming the m flag is 0) <code>LDA
+    $12</code> loads into the accumulator, rather that the value
+    that <code>LDA ($12)</code> loads into the accumulator.
+    Nonetheless, some assemblers permit (or require) the syntax
+    <code>PEI ($12)</code>. Note, however, that <code>PEI</code>
+    always pushes a 16-bit value no matter what the value of the m
+    flag (or, for that matter the x flag) is.</p>
     <p>Most assemblers use the syntax <code>PER</code> LABEL,
     rather than <code>PER</code> #LABEL; in fact, assemblers that
     even permit the latter syntax (much less require it) are rare.
-    Even though <code>PER</code> <code>$1234</code> itself does not
-    access memory location <code>$1234</code>, subsequent
-    instructions in any program that uses <code>PER</code> are
-    likely to use the value pushed to access that memory location
-    shortly thereafter. For example</p>
+    Even though <code>PER $1234</code> itself does not access
+    memory location <code>$1234</code>, subsequent instructions in
+    any program that uses <code>PER</code> are likely to use the
+    value pushed to access that memory location shortly thereafter.
+    For example</p>
     <pre>
        PER LABEL2-1
        BRL LABEL1
@@ -5482,17 +5472,17 @@ LABEL2
     relative (instead of absolute) addressing. <code>PER</code>
     doesn't access address LABEL2, but address LABEL2 gets accessed
     when the subroutine returns and the opcode at LABEL2 is
-    fetched. A (somewhat) comparable situation is <code>JMP</code>
-    <code>$1234</code>; the <code>JMP</code> itself does not access
+    fetched. A (somewhat) comparable situation is <code>JMP
+    $1234</code>; the <code>JMP</code> itself does not access
     <code>$1234</code>, but <code>$1234</code> is accessed when the
     opcode at <code>$1234</code> (i.e. the next instruction) is
     fetched.</p>
     <p>Example: If the S register is <code>$01FF</code>, then after
-    <code>PEA</code> <code>#$1234</code>,</p>
+    <code>PEA #$1234</code>,</p>
     <ul>
-      <li><code>$0001Ff</code> Will Contain <code>$12</code></li>
-      <li><code>$0001Fe</code> Will Contain <code>$34</code></li>
-      <li>The S Register Will Be <code>$01Fd</code></li>
+      <li><code>$0001FF</code> will contain <code>$12</code></li>
+      <li><code>$0001FE</code> will contain <code>$34</code></li>
+      <li>the S register will be <code>$01FD</code></li>
     </ul>
   </section>
   <section>
@@ -5591,15 +5581,15 @@ PulL Y register
     <p>Example: If the S register is <code>$01FD</code>, the m flag
     is 0, and</p>
     <ul>
-      <li><code>$0001Fe</code> Contains <code>$Ab</code></li>
-      <li><code>$0001Ff</code> Contains <code>$Cd</code></li>
+      <li><code>$0001FE</code> contains <code>$AB</code></li>
+      <li><code>$0001FF</code> contains <code>$CD</code></li>
     </ul>
     <p class="added">then after a <code>PLA</code></p>
     <ul>
-      <li>The Accumulator Will Be <code>$Cdab</code></li>
-      <li>The N Flag Will Be 1</li>
-      <li>The Z Flag Will Be 0</li>
-      <li>The S Register Will Be <code>$01Ff</code></li>
+      <li>the accumulator will be <code>$CDAB</code></li>
+      <li>the n flag will be 1</li>
+      <li>the z flag will be 0</li>
+      <li>the S register will be <code>$01FF</code></li>
     </ul>
   </section>
   <section>
@@ -5712,15 +5702,15 @@ PulL Processor status register
     change the <code>DBR</code>.</p>
     <p>Example: If the S register is <code>$01FD</code> and</p>
     <ul>
-      <li><code>$0001Fe</code> Contains <code>$Ab</code></li>
-      <li><code>$0001Ff</code> Contains <code>$Cd</code></li>
+      <li><code>$0001FE</code> contains <code>$AB</code></li>
+      <li><code>$0001FF</code> contains <code>$CD</code></li>
     </ul>
     <p class="added">then after a <code>PLD</code></p>
     <ul>
-      <li>The D Register Will Be <code>$Cdab</code></li>
-      <li>The N Flag Will Be 1</li>
-      <li>The Z Flag Will Be 0</li>
-      <li>The S Register Will Be <code>$01Ff</code></li>
+      <li>the D register will be <code>$CDAB</code></li>
+      <li>the n flag will be 1</li>
+      <li>the z flag will be 0</li>
+      <li>the S register will be <code>$01FF</code></li>
     </ul>
   </section>
   <section>
@@ -5908,20 +5898,20 @@ Transfer Y register to X register
     is an important difference that must be accounted for if you
     want to run emulation mode code in (8-bit) native mode.</p>
     <ul>
-      <li>The N Flag Is 1 When The High Bit Of The Result (I.E. The
-      Value Transferred From One Register To The Other) Is 1, and
-      The N Flag Is 0 When The High Bit Of The Result Is 0.</li>
-      <li>The Z Flag Is 1 When The Result Is Zero, and The Z Flag
-      Is 0 When The Result Is Nonzero.</li>
+      <li>The n flag is 1 when the high bit of the result (i.e. the
+      value transferred from one register to the other) is 1, and
+      the n flag is 0 when the high bit of the result is 0.</li>
+      <li>The z flag is 1 when the result is zero, and the z flag
+      is 0 when the result is nonzero.</li>
     </ul>
     <p>Example: If the accumulator is <code>$1234</code>, the X
     register is <code>$ABCD</code>, and the m flag is 1, then after
     a <code>TXA</code></p>
     <ul>
-      <li>The Accumulator Will Be <code>$12Cd</code></li>
-      <li>The N Flag Will Be 1 (Since Only <code>$Cd</code> Was
-      Actually Transferred)</li>
-      <li>The Z Flag Will Be 0</li>
+      <li>the accumulator will be <code>$12CD</code></li>
+      <li>the n flag will be 1 (since only <code>$CD</code> was
+      actually transferred)</li>
+      <li>the z flag will be 0</li>
     </ul>
   </section>
   <section>
@@ -5989,11 +5979,11 @@ Transfer Stack pointer to C accumulator
     the A accumulator (i.e. the low byte of the accumulator) to the
     SL register.</p>
     <ul>
-      <li>The N Flag Is 1 When The High Bit Of The Result (I.E. The
-      Value Transferred From One Register To The Other) Is 1, and
-      The N Flag Is 0 When The High Bit Of The Result Is 0.</li>
-      <li>The Z Flag Is 1 When The Result Is Zero, and The Z Flag
-      Is 0 When The Result Is Nonzero.</li>
+      <li>The n flag is 1 when the high bit of the result (i.e. the
+      value transferred from one register to the other) is 1, and
+      the n flag is 0 when the high bit of the result is 0.</li>
+      <li>The z flag is 1 when the result is zero, and the z flag
+      is 0 when the result is nonzero.</li>
     </ul>
     <p class="added"><code>TAD</code>, <code>TAS</code>,
     <code>TDA</code>, and <code>TSA</code> are alternate names for
@@ -6006,9 +5996,9 @@ Transfer Stack pointer to C accumulator
     <p>Example: If the D register is <code>$1234</code>, then after
     a <code>TDC</code></p>
     <ul>
-      <li>The Accumulator Will Be <code>$1234</code></li>
-      <li>The N Flag Will Be 0</li>
-      <li>The Z Flag Will Be 0</li>
+      <li>the accumulator will be <code>$1234</code></li>
+      <li>the n flag will be 0</li>
+      <li>the z flag will be 0</li>
     </ul>
   </section>
   <section>
@@ -6050,19 +6040,19 @@ eXchange B and A accumulator
     accumulator, which is the same as the initial value of the B
     accumulator.</p>
     <ul>
-      <li>The N Flag Is 1 When The High Bit Of The Result Is 1, and
-      The N Flag Is 0 When The High Bit Of The Result Is 0.</li>
-      <li>The Z Flag Is 1 When The Result Is Zero, and The Z Flag
-      Is 0 When The Result Is Nonzero.</li>
+      <li>The n flag is 1 when the high bit of the result is 1, and
+      the n flag is 0 when the high bit of the result is 0.</li>
+      <li>The z flag is 1 when the result is zero, and the z flag
+      is 0 when the result is nonzero.</li>
     </ul>
     <p class="added"><code>SWA</code> is an alternate name for this
     instruction, and is allowed by many 65C816 assemblers.</p>
     <p>Example: If the accumulator is <code>$6789</code>, then
     after an <code>XBA</code></p>
     <ul>
-      <li>The Accumulator Will Be <code>$8967</code></li>
-      <li>The N Flag Will Be 0</li>
-      <li>The Z Flag Will Be 0</li>
+      <li>the accumulator will be <code>$8967</code></li>
+      <li>the n flag will be 0</li>
+      <li>the z flag will be 0</li>
     </ul>
   </section>
   <section>
@@ -6102,8 +6092,8 @@ eXchange Carry and Emulation flags
     <p>Example: If the c flag is 0 and the e flag is 1, then after
     an <code>XCE</code></p>
     <ul>
-      <li>The C Flag Will Be 1</li>
-      <li>The E Flag Will Be 0</li>
+      <li>the c flag will be 1</li>
+      <li>the e flag will be 0</li>
     </ul>
   </section>
   <section>
@@ -6164,10 +6154,9 @@ eXchange Carry and Emulation flags
     For example, if the D register is <code>$0000</code> (and the e
     flag is 1), then <code>LDA ($FF)</code> uses a pointer whose
     low byte is at <code>$0000FF</code> and whose high byte is at
-    <code>$000000</code> (like the 65C02), but <code>PEI</code>
-    <code>$FF</code> pushes a 16-bit value whose low byte is at
-    <code>$0000FF</code> and whose high byte is at
-    <code>$000100</code>.</p>
+    <code>$000000</code> (like the 65C02), but <code>PEI $FF</code>
+    pushes a 16-bit value whose low byte is at <code>$0000FF</code>
+    and whose high byte is at <code>$000100</code>.</p>
     <p>Page 1 wrap around of the stack is similar. For example,
     when the S register is <code>$0100</code> (and the e flag is
     1), then <code>PHP</code> pushes the P register to
