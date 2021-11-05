@@ -2165,32 +2165,44 @@ nvmxdizc e - the flags affected by the instruction
 SYNTAX - an example of the assembler syntax of the instruction
 </pre>
     <p class="added">In the <code>LEN</code> column:</p>
-    <ul>
-      <li>m = m flag</li>
-      <li>x = x flag</li>
-    </ul>
+    <dl class="len-key">
+      <dt>m</dt>
+      <dd>m flag</dd>
+      <dt>x</dt>
+      <dd>x flag</dd>
+    </dl>
     <p>Thus, for example, 3-m is a succinct way of saying 3 bytes
     when the m flag is 0, and 2 bytes when the m flag is 1.</p>
     <p>In the CYCLES column:</p>
-    <ul>
-      <li>e = e flag</li>
-      <li>m = m flag</li>
-      <li>p = 1 if a page boundary is crossed, 0 otherwise</li>
-      <li>t = 1 if branch taken, 0 otherwise</li>
-      <li>w = 0 if the DL register is <code>$00</code>, 1
-      otherwise</li>
-      <li>x = x flag</li>
-    </ul>
+    <dl class="cycles-key">
+      <dt>e</dt>
+      <dd>e flag</dd>
+      <dt>m</dt>
+      <dd>m flag</dd>
+      <dt>p</dt>
+      <dd>1 if a page boundary is crossed, 0 otherwise</dd>
+      <dt>t</dt>
+      <dd>1 if branch taken, 0 otherwise</dd>
+      <dt>w</dt>
+      <dd>0 if the DL register is $00, 1 otherwise</dd>
+      <dt>x</dt>
+      <dd>x flag</dd>
+    </dl>
     <p>Again, for example, 3-m is a succinct way of saying 3 cycles
     when the m flag is 0, and 2 cycles when the m flag is 1.</p>
     <p>In the "nvmxdizc e" column:</p>
-    <ul>
-      <li>0 = flag is cleared</li>
-      <li>1 = flag is set</li>
-      <li>* = flag is affected</li>
-      <li>m = flag is affected by the (16-8*m)-bit result</li>
-      <li>x = flag is affected by the (16-8*x)-bit result</li>
-    </ul>
+    <dl class="flags-key">
+      <dt>0</dt>
+      <dd>flag is cleared</dd>
+      <dt>1</dt>
+      <dd>flag is set</dd>
+      <dt>*</dt>
+      <dd>flag is affected</dd>
+      <dt>m</dt>
+      <dd>flag is affected by the (16-8*m)-bit result</dd>
+      <dt>x</dt>
+      <dd>flag is affected by the (16-8*x)-bit result</dd>
+    </dl>
     <p>For example, the m in the z column of <code>ADC</code> means
     that the z flag is affected by the 16-bit result when the m
     flag is 0, and the 8-bit result when the m flag is 1.</p>
@@ -6208,5 +6220,7 @@ eXchange Carry and Emulation flags
     well as data.</p>
     <p><span class="c2">Last Updated September 28, 2015.</span></p>
   </section>
+  <script src="./post.js" type="module"></script>
+  <instruction-table-key></instruction-table-key>
 </body>
 </html>

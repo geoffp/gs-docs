@@ -50,11 +50,21 @@ export function setup(customEl) {
       root.addEventListener(eventType, handleEvent);
   }
 
-  const $ = root.getElementById.bind(root);
+  /**
+   * Element retrieval
+   * @param {any} idOrSel
+   * @returns {Element}
+   */
+  const $ = idOrSel =>
+    root.getElementById(idOrSel) || root.querySelector(idOrSel);
+
   customEl.dom = new Proxy(customEl, {
     get: (_, prop) => $(prop),
-    set: (_, prop, value) => $(prop).innerHTML = value
-  })
+    set: (_, prop, value) => {
+      $(prop).innerHTML = value;
+      return true;
+    }
+  });
 
   return {
     events: bindings => bindEvents(bindings),

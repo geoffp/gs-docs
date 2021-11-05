@@ -2,11 +2,16 @@ from bs4 import BeautifulSoup, NavigableString
 from util import (killall, kill_whitespace_in, kill_classes, listify,
                   is_spacing_p, is_under,
                   wrap_with_tag, string_children_of,
-                  indent_nav_item, wrap_section_number, move_section_name_into_a)
+                  indent_nav_item, wrap_section_number,
+                  move_section_name_into_a, replace_string_node,
+                  ul_to_dl, find_adjacent_ul,
+                  Flag, Register, FlagRegisterBit)
 import match
 import build
+import pprint
 from os.path import join
 
+pp = pprint.PrettyPrinter(indent=4)
 
 site_path = "site"
 materials_path = "src/materials"
@@ -36,21 +41,32 @@ def make_header():
 
 
 # Add things to <head> (css, js)
+
+def process_el(el, to_append=[], to_prepend=[]):
+    [el.contents[0].insert_before(e) for e in to_prepend]
+    [el.append(e) for e in to_append]
+
+
 def process_head():
-    head = html.head
-    to_prepend = [
-      # html.new_tag('base', href="/src/65c816/")
-    ]
-    to_append = [
-        html.new_tag('meta', attrs={
-            'name': 'viewport',
-            'content': "width=device-width, initial-scale=1"
-        }),
-        html.new_tag('link', rel="stylesheet", href="./index.css"),
-        html.new_tag('script', type="module", src="./index.js"),
-    ]
-    [head.contents[0].insert_before(e) for e in to_prepend]
-    [head.append(e) for e in to_append]
+    process_el(
+        html.head,
+        to_append=[
+            html.new_tag('meta', attrs={
+                'name': 'viewport',
+                'content': "width=device-width, initial-scale=1"
+            }),
+            html.new_tag('link', rel="stylesheet", href="./index.css"),
+            html.new_tag('script', type="module", src="./index.js"),
+        ])
+
+
+def process_body():
+    process_el(
+        html.body,
+        to_append=[
+            html.new_tag('script', type="module", src="./post.js"),
+            html.new_tag('instruction-table-key'),
+        ])
 
 
 # Add the search bar
@@ -126,9 +142,6 @@ def process_headings():
     Note: selectors assume that process_nav() has already been run.
     """
     headings = html.select("nav .section-name") + html.select("h3 > a")
-    # selectors = ["nav .section-name", "h3 > a"]
-    # headings = [html.select(s) for s in selectors]
-    print(headings)
 
     for heading in headings:
         [prettify_heading(text)
@@ -199,34 +212,68 @@ def wrap_patterns(matchers, filter_func=lambda _: True):
     for matcher in listify(matchers):
         matches = filter(filter_func, html.find_all(string=matcher))
         for string_node in matches:
-            new_nodes = process_matches_in_string_node(
-                string_node, matcher
-            )
-            string_node.insert_after(*new_nodes)
-            string_node.replace_with('')
+            new_nodes = process_matches_in_string_node(string_node, matcher)
+            replace_string_node(string_node, new_nodes)
+
+
+def parse_cpu_feature(signifier, classType):
+    features = {}
+    found_ul = find_adjacent_ul(html, signifier)
+
+    for r in [classType(r.string) for r in found_ul.find_all('li')]:
+        features[r.short_name] = r
+
+    return features
+
+
+def parse_registers_and_flags():
+    registers = {}
+    flags = {}
+    flag_bits = {}
+
+    try:
+        registers = parse_cpu_feature("There are 9 registers.", Register)
+        flags = parse_cpu_feature("There are 10 flags.", Flag)
+        flag_bits = parse_cpu_feature("The P register contains", FlagRegisterBit)
+    except AttributeError as err:
+        print("Error parsing registers or flags:", err)
+
+    # pp.pprint(registers)
+    # pp.pprint(flags)
+    # pp.pprint(flagBits)
+    return registers, flags
+
+
+def process_instruction_keys():
+    keys = [("In the LEN column:", "len-key"),
+            ("In the CYCLES column:", "cycles-key"),
+            ('In the "nvmxdizc e" column:', "flags-key")]
+    for signifier, class_name in keys:
+        ul = find_adjacent_ul(html, signifier)
+        ul_to_dl(ul, class_name)
 
 
 # Do the things!
+registers, flags = parse_registers_and_flags()
 process_head()
 make_header()
 make_search()
 wrap_sections()
 wrap_bare_text_in_sections()
+process_instruction_keys()
 process_preformatteds()
 process_nav()
 process_headings()
 wrap_patterns(
-    match.call_expression,
-    lambda s: is_under(['p', 'li'], s) and not is_under('code', s)
-)
-wrap_patterns(
-    match.hex_number,
+    [match.call_expression, match.hex_number],
     lambda s: is_under(['p', 'li'], s) and not is_under('code', s)
 )
 wrap_patterns(
     match.opcode,
     lambda s: not is_under(['code', 'pre', 'table'], s)
 )
+process_body()
+
 
 # Write HTML
 with open(join(site_path, "65c816/index.html"), 'w') as f:
