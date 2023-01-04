@@ -59,6 +59,7 @@ AppleGaramond.ttf
   --sticky-nav-width: 10rem;
   --color-link: #555;
   --color-link-hover: blue;
+  --color-note: #f2f2cc;
 }
 
 @media screen and (max-width:500px) {
@@ -76,6 +77,28 @@ body {
   font-size: 1.3rem;
   font-family: "Apple Garamond", serif;
   margin: var(--spacing-1);
+}
+
+/* Big screen = grid layout! */
+@media screen and (min-width:1024px) {
+  body {
+    display: grid;
+    grid-template:
+      "head head" auto
+      "nav content" 100% / 250px auto;
+  }
+
+  header, search-bar {
+    grid-area: head;
+  }
+
+  nav {
+    grid-area: nav;
+  }
+
+  main {
+    grid-area: content;
+  }
 }
 
 html {
@@ -127,13 +150,13 @@ search-bar {
   box-shadow: var(--shadow);
 }
 
-h3 {
+main * + h3 {
   margin: var(--spacing-1) 0;
   margin-right: calc(var(--spacing-1) + var(--sticky-nav-width)) !important;
 }
 
 h3:first-child {
-  margin: var(--spacing-1) 0;
+  margin: 0 0 var(--spacing-1) 0;
 }
 
 
@@ -141,6 +164,10 @@ h3:first-child {
 
 nav {
   --indent: 0rem;
+}
+
+nav > ul {
+  padding-left: 0;
 }
 
 nav li {
@@ -206,7 +233,7 @@ aside.right {
   padding: var(--spacing-1);
   margin: var(--spacing-1);
   margin-right: 0;
-  background: #f2f2cc;
+  background: var(--color-note);
   border: solid 1px #e2e2bb;
 }
 

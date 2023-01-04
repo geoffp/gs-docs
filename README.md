@@ -42,4 +42,4 @@ An **application** is, in general:
     - Rendered on the fly by a server
 
 ### State Across Pages
-- All Application state is that must be persisted across pages lives in straight up IndexedDB
+- All Application state is that must be persisted across pages lives in IndexedDB

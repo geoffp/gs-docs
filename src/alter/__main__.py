@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup, NavigableString
 from util import (killall, kill_whitespace_in, kill_classes, listify,
                   is_spacing_p, is_under,
+                  make_new,
                   wrap_with_tag, string_children_of,
                   indent_nav_item, wrap_section_number,
                   move_section_name_into_a, replace_string_node,
@@ -43,6 +44,7 @@ def make_header():
 # Add things to <head> (css, js)
 
 def process_el(el, to_append=[], to_prepend=[]):
+    """Add lists of things to the beginning and/or end of an element """
     [el.contents[0].insert_before(e) for e in to_prepend]
     [el.append(e) for e in to_append]
 
@@ -88,6 +90,14 @@ def wrap_sections():
         else:
             section.append(e)
         e = next
+
+
+def bundle_sections_in_main():
+    main = make_new('main')
+    print(main)
+    html.body.section.insert_before(main)
+    sections = html.body.find_all("section", recursive=False)
+    process_el(main, to_append=sections)
 
 
 def wrap_bare_text_in_sections():
@@ -235,6 +245,8 @@ def parse_registers_and_flags():
         registers = parse_cpu_feature("There are 9 registers.", Register)
         flags = parse_cpu_feature("There are 10 flags.", Flag)
         flag_bits = parse_cpu_feature("The P register contains", FlagRegisterBit)
+        # The terms used for these registers and flags
+        "The terms used for these registers and flags"
     except AttributeError as err:
         print("Error parsing registers or flags:", err)
 
@@ -247,7 +259,7 @@ def parse_registers_and_flags():
 def process_instruction_keys():
     keys = [("In the LEN column:", "len-key"),
             ("In the CYCLES column:", "cycles-key"),
-            ('In the "nvmxdizc e" column:', "flags-key")]
+            ('In the "nvmxdizc e" column:', "nvmxdizc_e-key")]
     for signifier, class_name in keys:
         ul = find_adjacent_ul(html, signifier)
         ul_to_dl(ul, class_name)
@@ -273,6 +285,7 @@ wrap_patterns(
     lambda s: not is_under(['code', 'pre', 'table'], s)
 )
 process_body()
+bundle_sections_in_main()
 
 
 # Write HTML

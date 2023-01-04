@@ -22,12 +22,17 @@ function parseKey(keyName) {
   return data;
 }
 
-function parseKeys() {
+/**
+ *
+ * @param {string[]} keyNames
+ * @returns
+ */
+function parseKeys(keyNames) {
   const keys = {};
-  ['len', 'cycles', 'flags'].forEach(n => keys[n] = parseKey(n));
+  keyNames.forEach(n => keys[n] = parseKey(n));
   return keys;
 }
 
-window.keys = parseKeys();
+window.keys = parseKeys(['len', 'cycles', 'nvmxdizc_e']);
 
 console.log('keys:', keys);

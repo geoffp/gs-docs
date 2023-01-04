@@ -3,7 +3,8 @@
     "checkJs": true
     "moduleResolution": "none",
     "noImplicitAny": false,
-    "baseUrl": "."
+    "baseUrl": "./site",
+    "target": "es6"
   },
-  "include": ["**/*.js", "**/*.d.ts"]
+  "include": ["site/**/*.js", "site/**/*.d.ts"]
 }

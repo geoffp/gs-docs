@@ -181,10 +181,17 @@ class FlagRegisterBit(CPUFeature):
 
 
 def find_adjacent_ul(html, signifier):
-    expo = html.find(string=re.compile(signifier))
+    node = None
+
+    if isinstance(signifier, str):
+        node = html.find(string=re.compile(signifier))
+    else:
+        # It's a node then
+        node = signifier
+
     possibleUlLocations = [
-        expo.parent.find_next_sibling("ul"),
-        expo.find_next_sibling("ul")
+        node.parent.find_next_sibling("ul"),
+        node.find_next_sibling("ul")
     ]
     found_ul = next(ul for ul in possibleUlLocations if ul is not None)
     return found_ul
